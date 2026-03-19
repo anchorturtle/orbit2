@@ -128,23 +128,58 @@
     overflow:hidden;
   }
 
-  /* ── MOBILE: float-player fixed center-bottom ── */
+  /* ── MOBILE: full-viewport fixed layout ── */
   @media (max-width:767px){
+    /* body stays overflow:hidden — no page scroll */
+    body{overflow:hidden;}
+
+    /* float-player pinned at bottom */
     #float-player{
-      left:50%!important;
-      bottom:12px!important;
+      position:fixed!important;
+      left:0!important;
+      right:0!important;
+      bottom:0!important;
       top:auto!important;
-      transform:translateX(-50%)!important;
-      width:calc(100vw - 32px)!important;
-      max-width:420px!important;
+      transform:none!important;
+      width:100%!important;
+      max-width:100%!important;
       min-width:0!important;
+      border-radius:16px 16px 0 0!important;
+      border-left:none!important;
+      border-right:none!important;
+      border-bottom:none!important;
     }
-    #float-player.is-positioned{
-      bottom:12px!important;
-      top:auto!important;
+
+    /* mobile main: fixed flex column filling viewport below top bar */
+    main.mobile-main{
+      display:flex!important;
+      flex-direction:column!important;
+      position:fixed!important;
+      top:56px!important; /* height of top bar */
+      left:0!important;
+      right:0!important;
+      bottom:var(--player-height, 140px)!important;
+      overflow:hidden!important;
     }
-    body{overflow:auto;}
-    main.md\:hidden{overflow-y:auto;}
+
+    /* planet section: fixed height, no scroll */
+    .mobile-planet-section{
+      flex-shrink:0;
+      padding:16px 0 12px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    }
+
+    /* tracklist section: fills remaining space and scrolls */
+    .mobile-tracklist-section{
+      flex:1;
+      overflow-y:auto;
+      -webkit-overflow-scrolling:touch;
+      padding:0 20px 16px;
+    }
+    .mobile-tracklist-section::-webkit-scrollbar{display:none;}
+    .mobile-tracklist-section{-ms-overflow-style:none;scrollbar-width:none;}
   }
 
   #float-player::before{
@@ -297,8 +332,10 @@
 </main>
 
 <!-- ══ MOBILE MAIN ═══════════════════════════════════════════ -->
-<main class="md:hidden flex flex-col" style="min-height:100vh;padding-top:56px;padding-bottom:160px;overflow-y:auto;">
-  <div class="flex flex-col items-center py-8 relative">
+<!-- Fixed flex-column viewport: planet (fixed height) + tracklist (flex:1 scroll) -->
+<main class="md:hidden mobile-main">
+  <!-- Planet section: fixed height, no scroll -->
+  <div class="mobile-planet-section relative">
     <div class="absolute w-56 h-56 rounded-full ring-far depth-far" style="border:1px solid rgba(45,91,255,.07)"></div>
     <div class="relative w-44 h-44 depth-mid">
       <div class="planet-glow absolute inset-0 rounded-full"></div>
@@ -313,8 +350,8 @@
       </div>
     </div>
   </div>
-  <!-- Tracklist visible on landing -->
-  <div style="padding:0 20px 16px">
+  <!-- Tracklist section: scrollable middle region -->
+  <div class="mobile-tracklist-section">
     <span class="tape-counter" style="display:block;margin-bottom:12px">All Tracks</span>
     <div style="display:flex;flex-direction:column;gap:4px" id="mobile-main-tracklist"></div>
   </div>
@@ -415,6 +452,18 @@
     window.addEventListener("resize",()=>{resize();mkStars();});
   })();
 
+  /* ── MOBILE PLAYER HEIGHT → CSS VAR ── */
+  function updatePlayerHeightVar(){
+    if(window.innerWidth>=768)return;
+    const fp=document.getElementById("float-player");
+    if(fp){
+      document.documentElement.style.setProperty("--player-height", fp.offsetHeight+"px");
+    }
+  }
+  window.addEventListener("resize",updatePlayerHeightVar);
+  // Run after first paint
+  requestAnimationFrame(()=>requestAnimationFrame(updatePlayerHeightVar));
+
   const TRACKS=[
     {title:"Geronimo",                  artist:"jestR",file:"11 - Geronimo- jestR - 2020.mp3"},
     {title:"Mile High",                 artist:"jestR",file:"3 - Mile High- jestR - 2020.mp3"},
@@ -433,6 +482,7 @@
   const audio=document.getElementById("audio-player");
   let currentIndex=0,isPlaying=false,isShuffle=false,repeatMode=0;
   let seekOnReady=null,isSeeking=false;
+  let durationPollTimer=null;
 
   /* ── DRAG + CORNER RESIZE ── */
   (function(){
@@ -504,7 +554,28 @@
     const dur=audio.duration;
     if(dur&&isFinite(dur)&&dur>0){
       document.getElementById("time-total").textContent=fmt(dur);
+      return true;
     }
+    return false;
+  }
+
+  /* ── VBR DURATION POLLING ──
+     After audio.load(), some VBR files only reveal duration after
+     significant buffering. Poll every 500ms for up to 30s. */
+  function startDurationPoll(){
+    if(durationPollTimer)clearInterval(durationPollTimer);
+    const deadline=Date.now()+30000;
+    durationPollTimer=setInterval(()=>{
+      if(tryUpdateDuration()){
+        clearInterval(durationPollTimer);
+        durationPollTimer=null;
+        return;
+      }
+      if(Date.now()>=deadline){
+        clearInterval(durationPollTimer);
+        durationPollTimer=null;
+      }
+    },500);
   }
 
   function applySavedSeek(){
@@ -552,8 +623,12 @@
 
   function loadTrack(index,autoplay=false){
     currentIndex=index;seekOnReady=null;isSeeking=false;
+    // Clear any existing duration poll
+    if(durationPollTimer){clearInterval(durationPollTimer);durationPollTimer=null;}
     const t=TRACKS[index];
     audio.src=t.file;audio.load();
+    // Start VBR duration polling immediately after load()
+    startDurationPoll();
     updateChroma("focal-title",t.title);updateChroma("focal-title-mobile",t.title);
     ["focal-artist","focal-artist-mobile"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=t.artist;});
     document.getElementById("fp-title").textContent=t.title;
@@ -604,17 +679,14 @@
     const btn=document.getElementById("btn-repeat");
     const icon=document.getElementById("repeat-icon");
     if(repeatMode===0){
-      // Off → baby blue
       btn.style.color="var(--baby-blue)";
       icon.textContent="repeat";
       btn.title="Repeat: Off";
     } else if(repeatMode===1){
-      // Repeat All → red
       btn.style.color="var(--jestr-red)";
       icon.textContent="repeat";
       btn.title="Repeat: All";
     } else {
-      // Repeat One → red
       btn.style.color="var(--jestr-red)";
       icon.textContent="repeat_one";
       btn.title="Repeat: One";
