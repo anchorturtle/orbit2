@@ -480,6 +480,7 @@
   }
   audio.addEventListener("loadedmetadata",applySavedSeek);
   audio.addEventListener("canplay",applySavedSeek);
+    audio.addEventListener("durationchange",applySavedSeek);
 
   function setProgress(pct){
     document.getElementById("progress-fill").style.width=pct+"%";
