@@ -16,6 +16,8 @@
   --win-border:rgba(150,100,255,.28);
   --win-shadow:0 8px 48px rgba(0,0,0,.7),0 0 0 1px rgba(45,91,255,.07),inset 0 1px 0 rgba(255,255,255,.08),inset 0 -1px 0 rgba(0,0,0,.3);
   --win-radius:18px;
+  --mob-dock-h:70px;
+  --mob-player-h:190px;
 }
 *{box-sizing:border-box;}
 html,body{margin:0;padding:0;overflow:hidden;width:100%;height:100%;}
@@ -96,7 +98,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
 .win-resize.se{bottom:0;right:0;cursor:se-resize;}
 .win-body{flex:1;overflow:hidden;position:relative;z-index:1;display:flex;flex-direction:column;}
 
-/* ============ ANALOG BUTTONS (shared by ALL interactive buttons) ============ */
+/* ============ ANALOG BUTTONS ============ */
 .ctrl-btn,
 .taskbar-btn,
 .m-tab{
@@ -112,15 +114,11 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
   backdrop-filter:blur(8px);color:var(--baby-blue);
   box-shadow:0 2px 4px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.07);
 }
-.ctrl-btn:hover,
-.taskbar-btn:hover,
-.m-tab:hover{
+.ctrl-btn:hover,.taskbar-btn:hover,.m-tab:hover{
   background:rgba(126,200,227,.12);
   box-shadow:0 3px 8px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.10);
 }
-.ctrl-btn:active,
-.taskbar-btn:active,
-.m-tab:active{
+.ctrl-btn:active,.taskbar-btn:active,.m-tab:active{
   transform:scale(.95) translateY(1px);
   background:rgba(0,0,0,.18);
   border-top-color:rgba(0,0,0,.3);
@@ -128,10 +126,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
   border-bottom-color:rgba(255,255,255,.06);
   box-shadow:0 1px 2px rgba(0,0,0,.5),inset 0 2px 4px rgba(0,0,0,.35);
 }
-/* latched / active state */
-.ctrl-btn.active-state,
-.taskbar-btn.win-open,
-.m-tab.active{
+.ctrl-btn.active-state,.taskbar-btn.win-open,.m-tab.active{
   background:rgba(10,6,30,.70);
   border-top-color:rgba(0,0,0,.45);
   border-left-color:rgba(0,0,0,.35);
@@ -164,7 +159,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
 .volume-wrap:hover .volume-track-bg,.volume-wrap:hover .volume-fill-bar,
 .volume-wrap.dragging .volume-track-bg,.volume-wrap.dragging .volume-fill-bar{height:5px;}
 .progress-wrap.dragging .progress-thumb,.volume-wrap.dragging .volume-thumb{transform:translate(-50%,-50%) scale(1.2);}
-#vol-icon{cursor:pointer;transition:color .2s,text-shadow .2s;}
+#vol-icon{cursor:pointer;transition:color .2s,text-shadow .2s;user-select:none;-webkit-user-select:none;}
 #vol-icon.muted{color:var(--jestr-red)!important;text-shadow:0 0 8px rgba(232,0,61,.5);}
 
 /* ============ SEARCH ============ */
@@ -181,10 +176,9 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
 .track-item.active .track-title{color:#e9e1de!important;}
 .track-item.active .track-artist{color:var(--jestr-green)!important;}
 .track-item.dragging-item{opacity:.3;transform:scale(.97);}
-.drag-handle{cursor:grab;color:rgba(110,104,117,.3);display:flex;align-items:center;flex-shrink:0;transition:color .15s;padding:2px;}
+.drag-handle{cursor:grab;color:rgba(110,104,117,.3);display:flex;align-items:center;flex-shrink:0;transition:color .15s;padding:2px;touch-action:none;}
 .drag-handle:hover{color:rgba(0,200,150,.6);}
 .drag-handle:active{cursor:grabbing;}
-/* glowing drop line */
 .drop-indicator{
   height:3px;border-radius:999px;
   background:linear-gradient(90deg,transparent 0%,var(--jestr-purple) 20%,var(--jestr-blue) 50%,var(--jestr-green) 80%,transparent 100%);
@@ -206,7 +200,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
 #lb-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#e9e1de;transition:background .15s;}
 #lb-close:hover{background:rgba(232,0,61,.2);border-color:rgba(232,0,61,.4);color:var(--jestr-red);}
 
-/* ============ DOCK WINDOW (bottom nav — desktop) ============ */
+/* ============ DESKTOP DOCK ============ */
 #dock-win{
   position:fixed;bottom:10px;left:50%;transform:translateX(-50%);
   width:min(500px,94vw);z-index:400;border-radius:14px;
@@ -219,8 +213,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
 .dock-logo-main{font-size:15px;font-weight:900;font-style:italic;color:var(--jestr-purple);letter-spacing:-.03em;}
 .dock-logo-sub{font-size:7px;font-weight:700;letter-spacing:.25em;color:rgba(0,200,150,.5);text-transform:uppercase;}
 .dock-divider{width:1px;height:30px;background:rgba(100,60,200,.2);margin:0 4px;flex-shrink:0;}
-/* taskbar-btn overrides for dock */
-.taskbar-btn{flex-direction:column;align-items:center;gap:3px;min-width:60px;padding:6px 10px;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(200,180,255,.7);}
+.taskbar-btn{flex-direction:column;align-items:center;gap:3px;min-width:60px;padding:6px 10px;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--baby-blue);}
 .taskbar-btn .material-symbols-outlined{font-size:18px;}
 .taskbar-dot{width:4px;height:4px;border-radius:50%;background:var(--jestr-green);opacity:0;box-shadow:0 0 6px rgba(0,200,150,.8);transition:opacity .2s;margin-top:-1px;}
 .taskbar-btn.win-open .taskbar-dot{opacity:1;}
@@ -230,43 +223,50 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
 #mobile-dock{
   display:none;
   position:fixed;bottom:0;left:0;right:0;z-index:500;
-  background:rgba(6,4,18,.88);
-  backdrop-filter:blur(24px);
-  -webkit-backdrop-filter:blur(24px);
-  border-top:1px solid rgba(100,60,200,.18);
-  padding:6px 16px calc(6px + env(safe-area-inset-bottom));
+  background:rgba(6,4,18,.92);
+  backdrop-filter:blur(28px);
+  -webkit-backdrop-filter:blur(28px);
+  border-top:1px solid rgba(123,47,255,.22);
+  padding:8px 16px calc(8px + env(safe-area-inset-bottom));
   align-items:center;justify-content:space-around;
-  gap:0;
 }
+/* Mobile buttons — same analog aesthetic as player ctrl-btns */
 .mob-btn{
-  display:flex;flex-direction:column;align-items:center;gap:3px;
-  padding:6px 16px;border-radius:10px;cursor:pointer;
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.06);
-  border-top-color:rgba(255,255,255,.10);
-  border-bottom-color:rgba(0,0,0,.3);
-  color:rgba(200,180,255,.5);
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:8px 18px;border-radius:10px;cursor:pointer;flex:1;max-width:100px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.07);
+  border-top-color:rgba(255,255,255,.13);
+  border-left-color:rgba(255,255,255,.10);
+  border-bottom-color:rgba(0,0,0,.38);
+  border-right-color:rgba(0,0,0,.22);
+  color:var(--baby-blue);
   font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
   transition:background .12s,box-shadow .12s,transform .07s,color .12s,border-color .12s;
-  box-shadow:0 2px 4px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06);
-  flex:1;max-width:90px;
+  box-shadow:0 2px 5px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08);
 }
 .mob-btn .material-symbols-outlined{font-size:22px;}
-.mob-btn:hover{background:rgba(126,200,227,.1);}
-.mob-btn:active{transform:scale(.94) translateY(1px);background:rgba(0,0,0,.2);box-shadow:0 1px 2px rgba(0,0,0,.5),inset 0 2px 4px rgba(0,0,0,.35);border-top-color:rgba(0,0,0,.3);}
-.mob-btn.active{background:rgba(10,6,30,.75);border-top-color:rgba(0,0,0,.45);border-bottom-color:rgba(255,255,255,.07);box-shadow:inset 0 2px 6px rgba(0,0,0,.5);transform:translateY(1px);color:var(--jestr-green);}
+.mob-btn:hover{background:rgba(126,200,227,.1);box-shadow:0 3px 8px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.11);}
+.mob-btn:active{transform:scale(.94) translateY(1px);background:rgba(0,0,0,.2);box-shadow:0 1px 2px rgba(0,0,0,.5),inset 0 2px 4px rgba(0,0,0,.35);border-top-color:rgba(0,0,0,.32);border-bottom-color:rgba(255,255,255,.07);}
+.mob-btn.active{
+  background:rgba(10,6,30,.78);
+  border-top-color:rgba(0,0,0,.48);
+  border-left-color:rgba(0,0,0,.36);
+  border-bottom-color:rgba(255,255,255,.08);
+  box-shadow:inset 0 2px 6px rgba(0,0,0,.55),inset 0 1px 2px rgba(0,0,0,.35);
+  transform:translateY(1px);
+  color:var(--jestr-green);
+}
 .mob-btn.active .material-symbols-outlined{text-shadow:0 0 8px rgba(0,200,150,.5);}
 .mob-dot{width:4px;height:4px;border-radius:50%;background:var(--jestr-green);opacity:0;box-shadow:0 0 6px rgba(0,200,150,.8);transition:opacity .2s;}
 .mob-btn.active .mob-dot{opacity:1;}
 
 /* ============ MOBILE LAYOUT ============ */
-:root{--mob-dock-h:70px;}
 @media(max-width:767px){
   #dock-win{display:none;}
   #mobile-dock{display:flex;}
   #planet-bg{display:none;}
 
-  /* Player pinned at bottom above dock */
   #player-win{
     position:fixed!important;
     left:0!important;right:0!important;
@@ -275,29 +275,24 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
     width:100%!important;max-width:100%!important;min-width:0!important;
     border-radius:16px 16px 0 0!important;
     border-left:none!important;border-right:none!important;border-bottom:none!important;
-    z-index:350!important;
   }
-  /* Tracklist fills space between top and player */
   #tracklist-win{
     position:fixed!important;
     left:0!important;right:0!important;
     top:0!important;
-    bottom:calc(var(--mob-dock-h) + var(--mob-player-h, 190px))!important;
+    bottom:calc(var(--mob-dock-h) + var(--mob-player-h))!important;
     width:100%!important;max-width:100%!important;
     border-radius:0!important;
     border-left:none!important;border-right:none!important;border-top:none!important;
-    z-index:340!important;
   }
-  /* Gallery overlays the tracklist area when open */
   #gallery-win{
     position:fixed!important;
     left:0!important;right:0!important;
     top:0!important;
-    bottom:calc(var(--mob-dock-h) + var(--mob-player-h, 190px))!important;
+    bottom:calc(var(--mob-dock-h) + var(--mob-player-h))!important;
     width:100%!important;max-width:100%!important;
     border-radius:0!important;
     border-left:none!important;border-right:none!important;border-top:none!important;
-    z-index:345!important;
   }
 }
 @media(min-width:768px){
@@ -331,8 +326,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
   </div>
 </div>
 
-<!-- TRACKLIST WINDOW -->
-<div id="tracklist-win" class="win" style="left:20px;top:20px;width:280px;height:520px;z-index:310">
+<!-- TRACKLIST WINDOW — starts hidden; JS shows it after layout -->
+<div id="tracklist-win" class="win" style="display:none;left:20px;top:20px;width:280px;height:520px;z-index:320">
   <div class="win-resize nw" data-dir="nw"></div><div class="win-resize ne" data-dir="ne"></div>
   <div class="win-resize sw" data-dir="sw"></div><div class="win-resize se" data-dir="se"></div>
   <div class="win-bar" id="tracklist-bar">
@@ -342,7 +337,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
       <span class="tape-counter" id="track-count" style="opacity:.6"></span>
     </div>
     <div class="win-bar-right">
-      <button class="win-close" onclick="closeWin('tracklist-win','btn-tracklist');if(isMob())setMobActive('btn-mob-tracks',false);" title="Close"><span class="material-symbols-outlined" style="font-size:11px">close</span></button>
+      <button class="win-close" id="close-tracklist" title="Close"><span class="material-symbols-outlined" style="font-size:11px">close</span></button>
     </div>
   </div>
   <div class="win-body" style="padding:10px 8px 10px;gap:8px">
@@ -357,7 +352,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
 </div>
 
 <!-- GALLERY WINDOW -->
-<div id="gallery-win" class="win" style="display:none;left:316px;top:20px;width:340px;height:480px;z-index:309">
+<div id="gallery-win" class="win" style="display:none;left:316px;top:20px;width:340px;height:480px;z-index:310">
   <div class="win-resize nw" data-dir="nw"></div><div class="win-resize ne" data-dir="ne"></div>
   <div class="win-resize sw" data-dir="sw"></div><div class="win-resize se" data-dir="se"></div>
   <div class="win-bar" id="gallery-bar">
@@ -366,7 +361,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
       <span class="win-title">Gallery</span>
     </div>
     <div class="win-bar-right">
-      <button class="win-close" onclick="closeWin('gallery-win','btn-gallery');if(isMob())setMobActive('btn-mob-gallery',false);" title="Close"><span class="material-symbols-outlined" style="font-size:11px">close</span></button>
+      <button class="win-close" id="close-gallery" title="Close"><span class="material-symbols-outlined" style="font-size:11px">close</span></button>
     </div>
   </div>
   <div class="win-body" style="overflow-y:auto;padding:10px" id="gallery-scroll">
@@ -374,8 +369,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
   </div>
 </div>
 
-<!-- PLAYER WINDOW -->
-<div id="player-win" class="win" style="left:20px;top:560px;width:380px;z-index:308">
+<!-- PLAYER WINDOW — starts hidden; JS shows after layout -->
+<div id="player-win" class="win" style="display:none;left:20px;top:560px;width:380px;z-index:330">
   <div class="win-resize nw" data-dir="nw"></div><div class="win-resize ne" data-dir="ne"></div>
   <div class="win-resize sw" data-dir="sw"></div><div class="win-resize se" data-dir="se"></div>
   <div class="win-bar" id="player-bar">
@@ -384,7 +379,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
       <span class="win-title">Orbit Player</span>
     </div>
     <div class="win-bar-right">
-      <button class="win-close" onclick="closeWin('player-win','btn-player');if(isMob())setMobActive('btn-mob-player',false);" title="Close"><span class="material-symbols-outlined" style="font-size:11px">close</span></button>
+      <button class="win-close" id="close-player" title="Close"><span class="material-symbols-outlined" style="font-size:11px">close</span></button>
     </div>
   </div>
   <div class="win-body" style="padding:10px 14px 12px;overflow:visible">
@@ -421,7 +416,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
       <span id="time-total" class="tape-counter" style="width:30px;flex-shrink:0;text-align:right;font-size:8px">0:00</span>
     </div>
     <div style="display:flex;align-items:center;gap:7px;background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:5px 10px">
-      <span id="vol-icon" class="material-symbols-outlined" title="Mute" style="font-size:14px;color:rgba(0,200,150,.55);flex-shrink:0">volume_up</span>
+      <span id="vol-icon" class="material-symbols-outlined" title="Mute/Unmute" style="font-size:14px;color:rgba(0,200,150,.55);flex-shrink:0;cursor:pointer">volume_up</span>
       <div class="volume-wrap" id="volume-rail">
         <div class="volume-track-bg"></div>
         <div class="volume-fill-bar" id="volume-fill" style="width:80%"></div>
@@ -438,7 +433,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
   <button id="lb-close"><span class="material-symbols-outlined" style="font-size:20px">close</span></button>
 </div>
 
-<!-- DESKTOP DOCK WINDOW (no close button) -->
+<!-- DESKTOP DOCK -->
 <div id="dock-win" class="win">
   <div class="win-body">
     <div class="dock-logo-wrap">
@@ -464,7 +459,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
   </div>
 </div>
 
-<!-- MOBILE DOCK (icon-only, always visible, no close) -->
+<!-- MOBILE DOCK -->
 <div id="mobile-dock">
   <button class="mob-btn active" id="btn-mob-tracks" onclick="mobToggle('tracklist-win','btn-mob-tracks')">
     <span class="material-symbols-outlined">queue_music</span>
@@ -484,7 +479,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
 </div>
 
 <script>
-/* STARS */
+/* ── STARS ── */
 (function(){
   const c=document.getElementById("stars-canvas"),ctx=c.getContext("2d");let W,H,stars=[];
   function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;}
@@ -495,18 +490,41 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
 
 function isMob(){return window.innerWidth<768;}
 
-/* MOBILE: measure player height so tracklist knows where to stop */
+/* ── Z-INDEX MANAGER ──
+   Player is preferred foreground; always goes to top.
+   Other windows raise on open/click but never above player unless player is hidden. */
+let _zBase=300;
+function bringToFront(winId){
+  _zBase++;
+  const win=document.getElementById(winId);
+  if(!win)return;
+  // Player preferred: give it +1 extra so it sits on top of tracklist when both open
+  if(winId==="player-win"){
+    win.style.zIndex=_zBase+1;
+  } else {
+    win.style.zIndex=_zBase;
+    // If player is visible, re-raise it above whatever just opened
+    const pl=document.getElementById("player-win");
+    if(pl&&pl.style.display==="flex"){
+      _zBase++;
+      pl.style.zIndex=_zBase;
+    }
+  }
+}
+
+/* ── MOB DOCK HEIGHT SYNC ── */
 function updateMobPlayerHeight(){
   if(!isMob())return;
   const pl=document.getElementById("player-win");
-  const dockH=document.getElementById("mobile-dock").offsetHeight||70;
-  const plH=pl.offsetHeight||190;
+  const dock=document.getElementById("mobile-dock");
+  const dockH=dock.offsetHeight||70;
+  const plH=(pl&&pl.style.display==="flex"?pl.offsetHeight:0)||190;
   document.documentElement.style.setProperty("--mob-player-h",plH+"px");
   document.documentElement.style.setProperty("--mob-dock-h",dockH+"px");
 }
 window.addEventListener("resize",updateMobPlayerHeight);
 
-/* MOBILE TOGGLE — each icon independently shows/hides its window */
+/* ── MOBILE TOGGLE ── */
 function setMobActive(btnId,on){
   const btn=document.getElementById(btnId);
   if(!btn)return;
@@ -514,58 +532,54 @@ function setMobActive(btnId,on){
 }
 function mobToggle(winId,btnId){
   const win=document.getElementById(winId);
-  const isVisible=win.style.display==="flex";
-  if(isVisible){
+  const visible=win.style.display==="flex";
+  if(visible){
     win.style.display="none";
     setMobActive(btnId,false);
   } else {
     win.style.display="flex";
     setMobActive(btnId,true);
+    bringToFront(winId);
     if(winId==="gallery-win")renderGallery();
   }
   updateMobPlayerHeight();
 }
 
-/* DESKTOP CENTERED LAYOUT AROUND PLANET */
+/* ── DESKTOP CENTERED LAYOUT ── */
 function applyDesktopLayout(){
   if(isMob())return;
   const vw=window.innerWidth,vh=window.innerHeight;
   const dock=document.getElementById("dock-win");
   const dockH=(dock?dock.offsetHeight:0)||70;
   const usableH=vh-dockH-10;
-  const centerX=vw/2, centerY=usableH/2;
+  const centerX=vw/2,centerY=usableH/2;
   const GAP=20;
 
   const tl=document.getElementById("tracklist-win");
   const g=document.getElementById("gallery-win");
   const pl=document.getElementById("player-win");
 
-  const tlW=Math.min(290,vw*0.23), tlH=Math.min(540,usableH-40);
-  const gW=Math.min(340,vw*0.26),  gH=Math.min(480,usableH-40);
-  const plW=Math.min(380,vw*0.30), plH=210;
+  const tlW=Math.min(290,vw*0.23),tlH=Math.min(540,usableH-40);
+  const gW=Math.min(340,vw*0.26),gH=Math.min(480,usableH-40);
+  const plW=Math.min(380,vw*0.30),plH=210;
 
-  tl.style.width=tlW+"px"; tl.style.height=tlH+"px";
-  g.style.width=gW+"px";   g.style.height=gH+"px";
-  pl.style.width=plW+"px"; pl.style.height=plH+"px";
+  tl.style.width=tlW+"px";tl.style.height=tlH+"px";
+  g.style.width=gW+"px";g.style.height=gH+"px";
+  pl.style.width=plW+"px";pl.style.height=plH+"px";
 
-  /* Tracklist: left of planet */
   tl.style.left=(centerX-tlW-GAP)+"px";
   tl.style.top=Math.max(16,centerY-tlH/2)+"px";
 
-  /* Gallery: right of planet */
   g.style.left=(centerX+GAP)+"px";
   g.style.top=Math.max(16,centerY-gH/2)+"px";
 
-  /* Player: centered below planet */
   pl.style.left=(centerX-plW/2)+"px";
   pl.style.top=Math.min(usableH-plH-16,centerY+160)+"px";
 
   tl.style.bottom=g.style.bottom=pl.style.bottom="";
 }
-applyDesktopLayout();
-window.addEventListener("resize",applyDesktopLayout);
 
-/* GALLERY */
+/* ── GALLERY ── */
 const GALLERY=[
   {src:"jestr-square.png",label:"jestR Square"},
   {src:"Jesterdaze.png",label:"Jesterdaze"},
@@ -582,7 +596,7 @@ function renderGallery(){
   });
 }
 
-/* WINDOW MANAGER */
+/* ── WINDOW DRAGGABLE + RESIZE ── */
 function makeWindowDraggable(winId,barId){
   const win=document.getElementById(winId),bar=document.getElementById(barId);
   let mode=null,sx,sy,sl,st,sw,sh;
@@ -600,9 +614,7 @@ function makeWindowDraggable(winId,barId){
     const cx=e.touches?e.touches[0].clientX:e.clientX,cy=e.touches?e.touches[0].clientY:e.clientY;
     sx=cx;sy=cy;sl=r.left;st=r.top;sw=r.width;sh=r.height;
     e.preventDefault();
-    const wins=document.querySelectorAll(".win");let maxZ=300;
-    wins.forEach(w=>{const z=parseInt(w.style.zIndex||300);if(z>maxZ)maxZ=z;});
-    win.style.zIndex=maxZ+1;
+    bringToFront(winId);
   }
   function onMove(e){
     if(!mode)return;
@@ -625,28 +637,40 @@ function makeWindowDraggable(winId,barId){
     el.addEventListener("mousedown",e=>{onDown(e,el.dataset.dir);e.stopPropagation();});
     el.addEventListener("touchstart",e=>{onDown(e,el.dataset.dir);e.stopPropagation();},{passive:false});
   });
+  // click anywhere on window body raises it to front
+  win.addEventListener("mousedown",()=>bringToFront(winId),{capture:true});
+  win.addEventListener("touchstart",()=>bringToFront(winId),{capture:true,passive:true});
   window.addEventListener("mousemove",onMove);
   window.addEventListener("touchmove",e=>{if(mode){e.preventDefault();onMove(e);}},{passive:false});
   window.addEventListener("mouseup",onUp);
   window.addEventListener("touchend",onUp);
 }
 
+/* ── TOGGLE / CLOSE WINDOWS ── */
 function toggleWin(winId,btnId){
   const win=document.getElementById(winId),btn=document.getElementById(btnId);
   if(!win||!btn)return;
   const visible=win.style.display==="flex";
   if(!visible){
     win.style.display="flex";btn.classList.add("win-open");
+    bringToFront(winId);
     if(winId==="gallery-win")renderGallery();
   } else {
     win.style.display="none";btn.classList.remove("win-open");
   }
 }
-function closeWin(winId,btnId){
-  const win=document.getElementById(winId),btn=document.getElementById(btnId);
+function closeWin(winId,dockBtnId,mobBtnId){
+  const win=document.getElementById(winId);
   if(win)win.style.display="none";
-  if(btn)btn.classList.remove("win-open");
+  if(dockBtnId){const b=document.getElementById(dockBtnId);if(b)b.classList.remove("win-open");}
+  if(mobBtnId)setMobActive(mobBtnId,false);
+  if(isMob())updateMobPlayerHeight();
 }
+
+// Wire up close buttons
+document.getElementById("close-tracklist").addEventListener("click",()=>closeWin("tracklist-win","btn-tracklist","btn-mob-tracks"));
+document.getElementById("close-gallery").addEventListener("click",()=>closeWin("gallery-win","btn-gallery","btn-mob-gallery"));
+document.getElementById("close-player").addEventListener("click",()=>closeWin("player-win","btn-player","btn-mob-player"));
 
 makeWindowDraggable("tracklist-win","tracklist-bar");
 makeWindowDraggable("gallery-win","gallery-bar");
@@ -655,7 +679,7 @@ makeWindowDraggable("player-win","player-bar");
 document.getElementById("lb-close").addEventListener("click",()=>document.getElementById("gallery-lightbox").classList.remove("open"));
 document.getElementById("gallery-lightbox").addEventListener("click",e=>{if(e.target.id==="gallery-lightbox")document.getElementById("gallery-lightbox").classList.remove("open");});
 
-/* TRACKS */
+/* ── TRACKS ── */
 let TRACKS=[
   {title:"Geronimo",                  artist:"jestR",file:"11 - Geronimo- jestR - 2020.mp3"},
   {title:"Mile High",                 artist:"jestR",file:"3 - Mile High- jestR - 2020.mp3"},
@@ -701,15 +725,16 @@ function makeScrubber(railId,onScrub,onEnd){
   function start(x){drag=true;rail.classList.add("dragging");onScrub(clientXToFraction(x,rail));}
   function move(x){if(!drag)return;onScrub(clientXToFraction(x,rail));}
   function end(){if(!drag)return;drag=false;rail.classList.remove("dragging");if(onEnd)onEnd();}
-  rail.addEventListener("mousedown",e=>{start(e.clientX);e.preventDefault();});
+  rail.addEventListener("mousedown",e=>{start(e.clientX);e.preventDefault();e.stopPropagation();});
   window.addEventListener("mousemove",e=>{if(drag)move(e.clientX);});
   window.addEventListener("mouseup",end);
-  rail.addEventListener("touchstart",e=>{start(e.touches[0].clientX);e.preventDefault();},{passive:false});
+  rail.addEventListener("touchstart",e=>{start(e.touches[0].clientX);e.preventDefault();e.stopPropagation();},{passive:false});
   window.addEventListener("touchmove",e=>{if(!drag)return;e.preventDefault();move(e.touches[0].clientX);},{passive:false});
   window.addEventListener("touchend",end);
 }
 makeScrubber("progress-rail",pct=>{isSeeking=true;seekToPct(pct);},()=>{isSeeking=false;});
 
+/* ── VOLUME ── */
 function volIconName(pct,muted){if(muted||pct===0)return"volume_off";if(pct<0.4)return"volume_down";return"volume_up";}
 function updateVolUI(pct,muted){
   document.getElementById("volume-fill").style.width=(pct*100)+"%";
@@ -719,9 +744,31 @@ function updateVolUI(pct,muted){
   icon.textContent=volIconName(pct,muted);
   muted?icon.classList.add("muted"):icon.classList.remove("muted");
 }
-function setVolume(pct){pct=Math.max(0,Math.min(1,pct));if(isMuted)isMuted=false;premuteVolume=pct;audio.volume=pct;updateVolUI(pct,false);}
-function toggleMute(){isMuted=!isMuted;if(isMuted){premuteVolume=audio.volume>0?audio.volume:premuteVolume;audio.volume=0;updateVolUI(0,true);}else{audio.volume=premuteVolume;updateVolUI(premuteVolume,false);}}
-document.getElementById("vol-icon").addEventListener("click",toggleMute);
+function setVolume(pct){
+  pct=Math.max(0,Math.min(1,pct));
+  isMuted=false;
+  premuteVolume=pct;
+  audio.volume=pct;
+  updateVolUI(pct,false);
+}
+function toggleMute(){
+  isMuted=!isMuted;
+  if(isMuted){
+    if(audio.volume>0)premuteVolume=audio.volume;
+    audio.volume=0;
+    updateVolUI(0,true);
+  } else {
+    const v=premuteVolume>0?premuteVolume:0.8;
+    audio.volume=v;
+    updateVolUI(v,false);
+  }
+}
+
+// vol-icon: tap/click = mute toggle; vol scrubber sets volume
+const volIconEl=document.getElementById("vol-icon");
+volIconEl.addEventListener("click",e=>{e.stopPropagation();toggleMute();});
+volIconEl.addEventListener("touchend",e=>{e.preventDefault();e.stopPropagation();toggleMute();},{passive:false});
+
 makeScrubber("volume-rail",pct=>setVolume(pct));
 
 audio.addEventListener("timeupdate",()=>{
@@ -762,11 +809,22 @@ function updateShuffleUI(){
 }
 function updatePlayIcons(){document.getElementById("play-icon").textContent=isPlaying?"pause":"play_arrow";}
 
-/* DRAG-TO-REORDER WITH GLOWING DROP INDICATOR */
+/* ── DRAG-TO-REORDER (desktop HTML5 + mobile touch) ── */
 let dragSrcIdx=null;let dropIndicator=null;
 function ensureDropIndicator(){
   if(!dropIndicator){dropIndicator=document.createElement("div");dropIndicator.className="drop-indicator";}
   return dropIndicator;
+}
+// Touch drag state
+let touchDragIdx=null,touchDragEl=null,touchClone=null;
+function removeTouchClone(){if(touchClone){touchClone.remove();touchClone=null;}}
+function getTrackIdxAtY(y){
+  const items=[...document.querySelectorAll("#sidebar-tracklist .track-item")];
+  for(const el of items){
+    const r=el.getBoundingClientRect();
+    if(y>=r.top&&y<r.bottom)return{el,before:(y-r.top)<r.height/2};
+  }
+  return null;
 }
 
 function trackHTML(t,i,isActive){
@@ -787,7 +845,10 @@ function bindTrackListEvents(){
   const list=document.getElementById("sidebar-tracklist");
   list.querySelectorAll(".track-item").forEach(el=>{
     const idx=parseInt(el.dataset.index);
+    // Click to play
     el.addEventListener("click",e=>{if(e.target.closest(".drag-handle"))return;loadTrack(idx,true);});
+
+    // ── Desktop drag ──
     el.addEventListener("dragstart",e=>{dragSrcIdx=idx;el.classList.add("dragging-item");e.dataTransfer.effectAllowed="move";});
     el.addEventListener("dragend",()=>{
       dragSrcIdx=null;el.classList.remove("dragging-item");
@@ -817,6 +878,62 @@ function bindTrackListEvents(){
       dragSrcIdx=null;if(dropIndicator.parentNode)dropIndicator.parentNode.removeChild(dropIndicator);
       renderAll();
     });
+
+    // ── Mobile touch drag (via drag handle only) ──
+    const handle=el.querySelector(".drag-handle");
+    if(handle){
+      handle.addEventListener("touchstart",e=>{
+        e.stopPropagation();
+        touchDragIdx=idx;
+        touchDragEl=el;
+        el.classList.add("dragging-item");
+        // ghost clone
+        touchClone=el.cloneNode(true);
+        touchClone.style.cssText=`position:fixed;z-index:9999;pointer-events:none;opacity:.85;width:${el.offsetWidth}px;border-radius:10px;background:rgba(45,91,255,.18);border:1px solid rgba(123,47,255,.5);`;
+        const r=el.getBoundingClientRect();
+        touchClone.style.left=r.left+"px";
+        touchClone.style.top=r.top+"px";
+        document.body.appendChild(touchClone);
+      },{passive:true});
+    }
+  });
+
+  // Touch move/end on the list container
+  list.addEventListener("touchmove",e=>{
+    if(touchDragIdx===null)return;
+    e.preventDefault();
+    const touch=e.touches[0];
+    if(touchClone){
+      touchClone.style.left=(touch.clientX-40)+"px";
+      touchClone.style.top=(touch.clientY-20)+"px";
+    }
+    // show drop indicator
+    const hit=getTrackIdxAtY(touch.clientY);
+    const indicator=ensureDropIndicator();
+    if(hit){
+      if(hit.before)list.insertBefore(indicator,hit.el);
+      else list.insertBefore(indicator,hit.el.nextSibling);
+    }
+  },{passive:false});
+
+  list.addEventListener("touchend",e=>{
+    if(touchDragIdx===null)return;
+    removeTouchClone();
+    if(touchDragEl)touchDragEl.classList.remove("dragging-item");
+    if(dropIndicator&&dropIndicator.parentNode){
+      const children=[...list.children];
+      let newPos=children.indexOf(dropIndicator);
+      if(newPos>touchDragIdx)newPos--;
+      newPos=Math.max(0,Math.min(TRACKS.length-1,newPos));
+      const moved=TRACKS.splice(touchDragIdx,1)[0];
+      TRACKS.splice(newPos,0,moved);
+      if(touchDragIdx===currentIndex)currentIndex=newPos;
+      else if(touchDragIdx<currentIndex&&newPos>=currentIndex)currentIndex--;
+      else if(touchDragIdx>currentIndex&&newPos<=currentIndex)currentIndex++;
+      dropIndicator.parentNode.removeChild(dropIndicator);
+    }
+    touchDragIdx=null;touchDragEl=null;
+    renderAll();
   });
 }
 
@@ -853,13 +970,26 @@ document.getElementById("search-input").addEventListener("input",e=>{
   });
 });
 
-/* INIT */
+/* ── INIT ── */
 setVolume(0.8);
 updateRepeatUI();
 updateShuffleUI();
 loadTrack(0,false);
-applyDesktopLayout();
+
+// Layout first, then show windows so they appear in correct position (no flash)
 requestAnimationFrame(()=>requestAnimationFrame(()=>{
+  applyDesktopLayout();
+  window.addEventListener("resize",applyDesktopLayout);
+
+  // Show tracklist + player on load; gallery stays closed
+  const tl=document.getElementById("tracklist-win");
+  const pl=document.getElementById("player-win");
+  tl.style.display="flex";
+  pl.style.display="flex";
+  // Set initial z: tracklist below player
+  tl.style.zIndex=320;
+  pl.style.zIndex=330;
+
   updateMobPlayerHeight();
 }));
 </script>
