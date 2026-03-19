@@ -90,9 +90,9 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
   box-shadow:0 2px 4px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.06);
 }
 .win-close:hover{background:rgba(232,0,61,.45);color:#fff;box-shadow:0 3px 8px rgba(0,0,0,.5),0 0 12px rgba(232,0,61,.45);}
-.win-close:active{transform:scale(.9) translateY(1px);box-shadow:0 1px 2px rgba(0,0,0,.6),inset 0 3px 5px rgba(0,0,0,.5);}
+.win-close:active{transform:scale(.9) translateY(1px);}
 
-/* ── Resize handles: original invisible 20×20 corner zones ── */
+/* Resize handles: invisible 20x20 corner zones */
 .win-resize{position:absolute;width:20px;height:20px;z-index:10;opacity:0;}
 .win-resize.nw{top:0;left:0;cursor:nw-resize;}
 .win-resize.ne{top:0;right:0;cursor:ne-resize;}
@@ -133,7 +133,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
 .progress-wrap.dragging .progress-track-bg,.progress-wrap.dragging .progress-fill-bar{height:5px;}
 .progress-wrap.dragging .progress-thumb{transform:translate(-50%,-50%) scale(1.2);}
 
-/* ============ VOLUME — native range input ============ */
+/* ============ VOLUME ============ */
 .vol-row{display:flex;align-items:center;gap:7px;background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:5px 10px;}
 #vol-icon-wrap{display:flex;align-items:center;justify-content:center;width:32px;height:32px;flex-shrink:0;cursor:pointer;border-radius:8px;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
 #vol-icon{font-size:14px;color:rgba(0,200,150,.65);pointer-events:none;transition:color .2s;}
@@ -159,7 +159,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
 /* ============ TRACK ITEMS ============ */
 .track-item{
   display:flex;align-items:center;gap:8px;
-  /* Tall padding = large easy target */
   padding:10px 10px;
   border-radius:10px;cursor:pointer;
   border:1px solid transparent;
@@ -170,14 +169,9 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
 .track-item.active{background:rgba(45,91,255,.12)!important;border-color:rgba(123,47,255,.3)!important;}
 .track-item.active .track-title{color:#e9e1de!important;}
 .track-item.active .track-artist{color:var(--jestr-green)!important;}
-/* Source row while dragging */
-.track-item.is-dragging{
-  opacity:.3;
-  background:rgba(123,47,255,.06)!important;
-}
+.track-item.is-dragging{opacity:.3;background:rgba(123,47,255,.06)!important;}
 
-/* ── Drop line indicator ── */
-/* A fixed absolutely-positioned line injected by JS */
+/* Drop line */
 #drop-line{
   position:fixed;left:0;right:0;pointer-events:none;z-index:9999;
   height:3px;
@@ -186,39 +180,34 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
   border-radius:999px;
   display:none;
 }
-/* Dot anchors on each end of the line */
 #drop-line::before,#drop-line::after{
   content:"";position:absolute;top:50%;transform:translateY(-50%);
   width:8px;height:8px;border-radius:50%;
-  background:var(--jestr-purple);
-  box-shadow:0 0 8px var(--jestr-purple);
+  background:var(--jestr-purple);box-shadow:0 0 8px var(--jestr-purple);
 }
 #drop-line::before{left:4px;}
 #drop-line::after{right:4px;background:var(--jestr-green);box-shadow:0 0 8px var(--jestr-green);}
 
 /* Drag handle */
 .drag-handle{
-  cursor:grab;
-  display:flex;align-items:center;flex-shrink:0;
-  /* Big tap target */
-  padding:6px 6px;
-  margin:-2px;
-  border-radius:6px;
+  cursor:grab;display:flex;align-items:center;flex-shrink:0;
+  padding:6px 6px;margin:-2px;border-radius:6px;
   color:rgba(150,100,255,.4);
   transition:color .15s,background .15s;
-  touch-action:none;
-  -webkit-tap-highlight-color:transparent;
+  touch-action:none;-webkit-tap-highlight-color:transparent;
 }
-.drag-handle:hover{
-  color:var(--jestr-purple);
-  background:rgba(123,47,255,.14);
-  cursor:grab;
-}
+.drag-handle:hover{color:var(--jestr-purple);background:rgba(123,47,255,.14);}
 .drag-handle.grabbing{cursor:grabbing;color:var(--jestr-purple);}
 
 /* ============ GALLERY ============ */
 .gallery-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:2px;}
-.gallery-item{border-radius:10px;overflow:hidden;cursor:pointer;border:1px solid rgba(123,47,255,.18);background:rgba(15,10,35,.5);transition:transform .18s,box-shadow .18s,border-color .18s;aspect-ratio:1/1;}
+.gallery-item{
+  border-radius:10px;overflow:hidden;cursor:pointer;
+  border:1px solid rgba(123,47,255,.18);
+  background:rgba(15,10,35,.5);
+  transition:transform .18s,box-shadow .18s,border-color .18s;
+  aspect-ratio:1/1;
+}
 .gallery-item:hover{transform:scale(1.03);box-shadow:0 0 18px rgba(123,47,255,.4);border-color:rgba(123,47,255,.5);}
 .gallery-item img{width:100%;height:100%;object-fit:cover;display:block;}
 
@@ -305,7 +294,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
 <div class="vignette"></div>
 <div class="scanlines"></div>
 <div class="grain-overlay"></div>
-<!-- DROP LINE — shared singleton, moved by JS -->
 <div id="drop-line"></div>
 <audio id="audio-player" preload="auto"></audio>
 
@@ -358,7 +346,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
   <div class="win-bar" id="gallery-bar">
     <div class="win-bar-left">
       <span class="material-symbols-outlined" style="font-size:12px;color:rgba(150,100,255,.5)">drag_indicator</span>
-      <span class="win-title">Gallery</span>
     </div>
     <div class="win-bar-right">
       <button class="win-close" id="close-gallery" title="Close"><span class="material-symbols-outlined" style="font-size:11px">close</span></button>
@@ -432,7 +419,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
   <div class="win-bar" id="image-win-bar">
     <div class="win-bar-left">
       <span class="material-symbols-outlined" style="font-size:12px;color:rgba(150,100,255,.5)">drag_indicator</span>
-      <span class="win-title">Gallery</span>
     </div>
     <div class="win-bar-right">
       <button class="win-close" id="close-image-win" title="Close"><span class="material-symbols-outlined" style="font-size:11px">close</span></button>
@@ -500,11 +486,11 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
 
 function isMob(){return window.innerWidth<768;}
 
-/* ── Z-INDEX MANAGER ── */
+/* ── Z-INDEX ── */
 let _zBase=300;
 function bringToFront(winId){_zBase++;const w=document.getElementById(winId);if(w)w.style.zIndex=_zBase+10;}
 
-/* ── MOB DOCK HEIGHT ── */
+/* ── MOB HEIGHT ── */
 function updateMobPlayerHeight(){
   if(!isMob())return;
   const pl=document.getElementById('player-win');
@@ -559,13 +545,31 @@ function applyDesktopLayout(){
 
 /* ── GALLERY ── */
 const GALLERY=[
-  {src:'jestr-square.png',label:'jestR Square'},
-  {src:'Jesterdaze.png',label:'Jesterdaze'},
-  {src:'jestr-untitled.png',label:'Untitled'},
+  {src:'19800879_207324159793930_1257706135595812184_o.jpg'},
+  {src:'File_000.png'},
+  {src:'JESTR-SQUARE.jpg'},
+  {src:'Jesterdaze.png'},
+  {src:'Untitled-1.jpg'},
+  {src:'bitchesandfire.png'},
+  {src:'boyvector.png'},
+  {src:'brain.gif'},
+  {src:'build_blocks_album.jpg'},
+  {src:'buildingblocks.jpg'},
+  {src:'color2.jpg'},
+  {src:'dsnatbb_calt.png'},
+  {src:'facethefear.png'},
+  {src:'jestr dollar.jpg'},
+  {src:'jestr-square.png'},
+  {src:'jestr-untitled.png'},
+  {src:'jstar.png'},
+  {src:'jstr.jpg'},
+  {src:'lightning-2020square.png'},
+  {src:'mandala.jpg'},
+  {src:'scratchyjstr.jpg'},
 ];
 function renderGallery(){
   const grid=document.getElementById('gw-grid');if(!grid)return;
-  grid.innerHTML=GALLERY.map((g,i)=>`<div class="gallery-item" data-gi="${i}"><img src="${g.src}" alt="${g.label}" loading="lazy"/></div>`).join('');
+  grid.innerHTML=GALLERY.map((g,i)=>`<div class="gallery-item" data-gi="${i}"><img src="${g.src}" alt="" loading="lazy"/></div>`).join('');
   grid.querySelectorAll('.gallery-item').forEach(el=>{
     el.addEventListener('click',()=>openImageWin(+el.dataset.gi));
     el.addEventListener('touchend',e=>{e.preventDefault();openImageWin(+el.dataset.gi);},{passive:false});
@@ -574,9 +578,8 @@ function renderGallery(){
 
 /* ── IMAGE VIEWER ── */
 function openImageWin(idx){
-  const item=GALLERY[idx];
   const win=document.getElementById('image-win');
-  document.getElementById('image-win-img').src=item.src;
+  document.getElementById('image-win-img').src=GALLERY[idx].src;
   if(!isMob()){
     const vw=window.innerWidth,vh=window.innerHeight;
     const w=Math.min(560,vw-80),h=Math.min(520,vh-120);
@@ -623,7 +626,7 @@ function makeWindowDraggable(winId,barId){
   }
   function onUp(){mode=null;}
   bar.addEventListener('mousedown',e=>startOp(e,'drag'));
-  bar.addEventListener('touchstart',e=>{if(isMob())return;const t=e.touches[0];startOp({clientX:t.clientX,clientY:t.clientY,preventDefault:()=>e.preventDefault(),stopPropagation:()=>{}}, 'drag');},{passive:false});
+  bar.addEventListener('touchstart',e=>{if(isMob())return;const t=e.touches[0];startOp({clientX:t.clientX,clientY:t.clientY,preventDefault:()=>e.preventDefault(),stopPropagation:()=>{}},'drag');},{passive:false});
   win.querySelectorAll('.win-resize').forEach(el=>{
     el.addEventListener('mousedown',e=>startOp(e,el.dataset.dir));
     el.addEventListener('touchstart',e=>{const t=e.touches[0];startOp({clientX:t.clientX,clientY:t.clientY,preventDefault:()=>e.preventDefault(),stopPropagation:()=>e.stopPropagation()},el.dataset.dir);},{passive:false});
@@ -698,10 +701,9 @@ function seekToPct(pct){pct=Math.max(0,Math.min(1,pct));setProgress(pct*100);if(
 function skip(sec){if(audio.readyState>=1&&isGoodDuration(audio.duration))audio.currentTime=Math.max(0,Math.min(audio.duration,(audio.currentTime||0)+sec));}
 function clientXToFraction(clientX,rail){const r=rail.getBoundingClientRect();return Math.max(0,Math.min(1,(clientX-r.left)/r.width));}
 
-/* Progress scrubber */
 (function(){
   const rail=document.getElementById('progress-rail');let active=false;
-  function apply(e){const x=e.clientX!==undefined?e.clientX:e.touches[0].clientX;isSeeking=true;seekToPct(clientXToFraction(x,rail));}
+  function apply(e){isSeeking=true;seekToPct(clientXToFraction(e.clientX,rail));}
   rail.addEventListener('pointerdown',e=>{active=true;rail.setPointerCapture(e.pointerId);rail.classList.add('dragging');apply(e);e.preventDefault();},{passive:false});
   rail.addEventListener('pointermove',e=>{if(!active)return;apply(e);},{passive:false});
   rail.addEventListener('pointerup',()=>{active=false;rail.classList.remove('dragging');isSeeking=false;});
@@ -720,11 +722,7 @@ function syncVolUI(v,muted){
   volIcon.textContent=volIconName(v,muted);
   muted?volIcon.classList.add('muted'):volIcon.classList.remove('muted');
 }
-function setVolume(v){
-  v=Math.max(0,Math.min(100,v));
-  isMuted=false;premuteVolume=v;audio.volume=v/100;
-  syncVolUI(v,false);
-}
+function setVolume(v){v=Math.max(0,Math.min(100,v));isMuted=false;premuteVolume=v;audio.volume=v/100;syncVolUI(v,false);}
 function toggleMute(){
   isMuted=!isMuted;
   if(isMuted){if(audio.volume>0)premuteVolume=audio.volume*100;audio.volume=0;syncVolUI(premuteVolume,true);}
@@ -769,37 +767,21 @@ function updateRepeatUI(){
 function updateShuffleUI(){const btn=document.getElementById('btn-shuffle');btn.style.color=isShuffle?'var(--jestr-red)':'var(--baby-blue)';isShuffle?btn.classList.add('active-state'):btn.classList.remove('active-state');}
 function updatePlayIcons(){document.getElementById('play-icon').textContent=isPlaying?'pause':'play_arrow';}
 
-/*
- ══════════════════════════════════════════════════════
-  DRAG-TO-REORDER  —  pointer-capture approach
-  ─ Grab the drag handle (big tap target)
-  ─ setPointerCapture so events keep firing even if
-    the finger/cursor leaves the element
-  ─ A single bright glowing line shows exactly where
-    the track will be inserted (no ghost clone)
-  ─ Every row has tall padding = large easy target zone
-  ─ Short tap/click on row body still plays the track
- ══════════════════════════════════════════════════════
-*/
+/* ── DRAG-TO-REORDER ── */
 const dropLine=document.getElementById('drop-line');
 let reorderSrcIdx=null;
-let reorderInsertAfter=null; // null = before first, 0..n-1 = after that index
+let reorderInsertAfter=null;
 
 function hideDropLine(){dropLine.style.display='none';}
 
 function showDropLine(afterIdx){
-  /* Position the line between rows.
-     afterIdx = -1  → before first row
-     afterIdx = n   → after last row  */
   const items=[...document.querySelectorAll('#sidebar-tracklist .track-item')];
   if(!items.length){hideDropLine();return;}
   let y;
   if(afterIdx<0){
-    const r=items[0].getBoundingClientRect();
-    y=r.top-1;
+    const r=items[0].getBoundingClientRect();y=r.top-1;
   } else if(afterIdx>=items.length){
-    const r=items[items.length-1].getBoundingClientRect();
-    y=r.bottom+1;
+    const r=items[items.length-1].getBoundingClientRect();y=r.bottom+1;
   } else {
     const ra=items[afterIdx].getBoundingClientRect();
     const rb=items[afterIdx+1]?items[afterIdx+1].getBoundingClientRect():ra;
@@ -821,18 +803,17 @@ function getInsertAfterFromY(clientY){
   for(let i=0;i<items.length;i++){
     const r=items[i].getBoundingClientRect();
     const mid=r.top+r.height/2;
-    if(clientY<mid) return i-1; // insert before item i = after i-1
+    if(clientY<mid) return i-1;
   }
-  return items.length-1; // after last
+  return items.length-1;
 }
 
 function doReorder(srcIdx,insertAfter){
   if(srcIdx===null||insertAfter===null)return;
-  // If inserting after srcIdx or srcIdx-1, nothing moves
   if(insertAfter===srcIdx||insertAfter===srcIdx-1)return;
   const moved=TRACKS.splice(srcIdx,1)[0];
   let at=insertAfter;
-  if(at>srcIdx)at--; // spliced one item out before this position
+  if(at>srcIdx)at--;
   TRACKS.splice(at+1,0,moved);
   const newIdx=at+1;
   if(srcIdx===currentIndex)currentIndex=newIdx;
@@ -858,14 +839,7 @@ function trackHTML(t,i,isActive){
 function bindTrackListEvents(){
   document.querySelectorAll('#sidebar-tracklist .track-item').forEach(el=>{
     const idx=+el.dataset.index;
-
-    /* Play on click anywhere except handle */
-    el.addEventListener('click',e=>{
-      if(e.target.closest('[data-handle]'))return;
-      loadTrack(idx,true);
-    });
-
-    /* ── DRAG via pointer capture on handle ── */
+    el.addEventListener('click',e=>{if(e.target.closest('[data-handle]'))return;loadTrack(idx,true);});
     const handle=el.querySelector('[data-handle]');
     handle.addEventListener('pointerdown',e=>{
       e.preventDefault();e.stopPropagation();
@@ -873,17 +847,13 @@ function bindTrackListEvents(){
       handle.classList.add('grabbing');
       reorderSrcIdx=idx;
       el.classList.add('is-dragging');
-      // Show initial line at current position
       showDropLine(idx-1);
     });
-
     handle.addEventListener('pointermove',e=>{
       if(reorderSrcIdx===null)return;
       e.preventDefault();
-      const after=getInsertAfterFromY(e.clientY);
-      showDropLine(after);
+      showDropLine(getInsertAfterFromY(e.clientY));
     });
-
     handle.addEventListener('pointerup',e=>{
       if(reorderSrcIdx===null)return;
       handle.releasePointerCapture(e.pointerId);
@@ -893,7 +863,6 @@ function bindTrackListEvents(){
       reorderSrcIdx=null;reorderInsertAfter=null;
       hideDropLine();
     });
-
     handle.addEventListener('pointercancel',e=>{
       handle.releasePointerCapture(e.pointerId);
       handle.classList.remove('grabbing');
