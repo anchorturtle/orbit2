@@ -11,6 +11,7 @@
   :root{
     --grain-opacity:.07;--scanline-opacity:.045;--vignette-strength:.72;--aberration:1.5px;
     --jestr-blue:#2D5BFF;--jestr-green:#00C896;--jestr-purple:#7B2FFF;--jestr-red:#E8003D;
+    --baby-blue:#7EC8E3;
   }
   *{box-sizing:border-box;}
   body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;margin:0;overflow:hidden;color:#e9e1de;}
@@ -29,17 +30,8 @@
   /* ── CRT / RETRO OVERLAYS ── */
   .grain-overlay{position:fixed;inset:0;pointer-events:none;z-index:200;opacity:var(--grain-opacity);background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain-shift .1s steps(1) infinite;mix-blend-mode:overlay;}
   @keyframes grain-shift{0%{transform:translate(0,0)}20%{transform:translate(-2px,1px)}40%{transform:translate(2px,-1px)}60%{transform:translate(-1px,2px)}80%{transform:translate(1px,-2px)}100%{transform:translate(0,0)}}
-  /* phosphor scanlines — tighter, slightly green-tinted for CRT feel */
   .scanlines{position:fixed;inset:0;pointer-events:none;z-index:199;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,180,.018) 2px,rgba(0,255,180,.018) 3px);}
-  /* horizontal sweep — slow rolling bright line */
-  .crt-sweep{
-    position:fixed;left:0;right:0;height:2px;z-index:201;pointer-events:none;
-    background:linear-gradient(90deg,transparent,rgba(0,230,160,.18),transparent);
-    animation:sweep 8s linear infinite;
-  }
-  @keyframes sweep{0%{top:-2px}100%{top:100vh}}
   .vignette{position:fixed;inset:0;pointer-events:none;z-index:198;background:radial-gradient(ellipse at center,transparent 32%,rgba(3,2,10,var(--vignette-strength)) 100%);}
-  /* subtle phosphor glow on text */
   .phosphor{text-shadow:0 0 8px rgba(0,200,150,.4),0 0 2px rgba(0,200,150,.2);}
   .chroma{position:relative;display:inline-block;}
   .chroma::before,.chroma::after{content:attr(data-text);position:absolute;inset:0;pointer-events:none;}
@@ -73,11 +65,12 @@
     display:flex;align-items:center;justify-content:center;
     transition:background .2s,border-color .2s,transform .1s,box-shadow .2s;
     backdrop-filter:blur(8px);
+    color:var(--baby-blue);
   }
   .ctrl-btn:hover{
-    background:rgba(123,47,255,.18);
-    border-color:rgba(123,47,255,.4);
-    box-shadow:0 0 10px rgba(123,47,255,.25);
+    background:rgba(126,200,227,.12);
+    border-color:rgba(126,200,227,.35);
+    box-shadow:0 0 10px rgba(126,200,227,.2);
     transform:scale(1.08);
   }
   .ctrl-btn:active{transform:scale(.95);}
@@ -116,8 +109,8 @@
   /* ── FLOATING PLAYER ── */
   #float-player{
     position:fixed;z-index:300;
-    /* default: left side, vertically centered */
-    left:320px; top:50%; transform:translateY(-50%);
+    /* default: bottom-left, next to sidebar */
+    left:320px;bottom:20px;
     width:360px;
     min-width:280px;max-width:680px;
     background:rgba(8,5,22,.52);
@@ -132,26 +125,23 @@
       inset 0 -1px 0 rgba(0,0,0,.3);
     padding:10px 14px 12px;
     user-select:none;
-    overflow:hidden; /* clip content, no overflow needed */
+    overflow:hidden;
   }
-  /* corner glow — pure CSS, no elements */
   #float-player::before{
     content:"";
     position:absolute;inset:0;border-radius:18px;pointer-events:none;
     background:
-      radial-gradient(circle 18px at 0% 0%,rgba(123,47,255,.35) 0%,transparent 70%),
-      radial-gradient(circle 18px at 100% 0%,rgba(123,47,255,.35) 0%,transparent 70%),
-      radial-gradient(circle 18px at 0% 100%,rgba(123,47,255,.35) 0%,transparent 70%),
-      radial-gradient(circle 18px at 100% 100%,rgba(123,47,255,.35) 0%,transparent 70%);
-    opacity:.7;
+      radial-gradient(circle 18px at 0% 0%,rgba(126,200,227,.3) 0%,transparent 70%),
+      radial-gradient(circle 18px at 100% 0%,rgba(126,200,227,.3) 0%,transparent 70%),
+      radial-gradient(circle 18px at 0% 100%,rgba(126,200,227,.3) 0%,transparent 70%),
+      radial-gradient(circle 18px at 100% 100%,rgba(126,200,227,.3) 0%,transparent 70%);
+    opacity:.65;
     transition:opacity .3s;
     z-index:0;
   }
   #float-player:hover::before{opacity:1;}
-  /* resize cursor zones on corners via outline trick — handled in JS */
-  #float-player.is-positioned{transform:none;}
+  #float-player.is-positioned{bottom:auto;}
 
-  /* drag handle */
   #fp-handle{
     display:flex;align-items:center;justify-content:space-between;
     margin-bottom:8px;cursor:grab;padding-bottom:6px;
@@ -160,10 +150,9 @@
   }
   #fp-handle:active{cursor:grabbing;}
 
-  /* invisible corner resize zones */
   .fp-resize{
     position:absolute;width:20px;height:20px;
-    z-index:10;opacity:0; /* invisible — cursor only */
+    z-index:10;opacity:0;
   }
   .fp-resize.nw{top:0;left:0;cursor:nw-resize;}
   .fp-resize.ne{top:0;right:0;cursor:ne-resize;}
@@ -182,7 +171,6 @@
     display:flex;align-items:center;justify-content:center;
     gap:8px;margin-bottom:10px;position:relative;z-index:1;
   }
-  /* progress row — times INSIDE the container */
   #fp-progress{
     display:flex;align-items:center;gap:7px;
     position:relative;z-index:1;
@@ -205,14 +193,14 @@
 <canvas id="stars-canvas"></canvas>
 <div class="vignette"></div>
 <div class="scanlines"></div>
-<div class="crt-sweep"></div>
 <div class="grain-overlay"></div>
 <audio id="audio-player" preload="auto"></audio>
 
 <!-- ══ SIDEBAR ════════════════════════════════════════ -->
 <aside class="hidden md:flex h-full w-64 fixed left-0 top-0 z-40 flex-col border-r container-texture depth-near"
   style="background:rgba(6,4,18,.82);backdrop-filter:blur(24px);border-color:rgba(100,60,200,.14);padding:24px 20px;gap:16px">
-  <div style="margin-bottom:4px">
+  <!-- centered title block -->
+  <div style="text-align:center;margin-bottom:4px">
     <h1 class="text-2xl font-black tracking-tighter italic vhs-flicker phosphor" style="color:var(--jestr-purple);line-height:1">Orbit</h1>
     <p class="font-bold tracking-[0.3em] text-[8px] uppercase phosphor" style="color:rgba(0,200,150,.6);margin-top:2px">Cosmic Hi-Fi</p>
   </div>
@@ -313,24 +301,21 @@
 
 <!-- ══ FLOATING PLAYER ═══════════════════════════════════════ -->
 <div id="float-player" class="container-texture">
-  <!-- invisible corner resize zones -->
   <div class="fp-resize nw" data-dir="nw"></div>
   <div class="fp-resize ne" data-dir="ne"></div>
   <div class="fp-resize sw" data-dir="sw"></div>
   <div class="fp-resize se" data-dir="se"></div>
 
-  <!-- drag handle -->
   <div id="fp-handle">
     <div style="display:flex;align-items:center;gap:6px">
       <span class="material-symbols-outlined" style="font-size:13px;color:rgba(150,100,255,.55)">drag_indicator</span>
       <span class="tape-counter" style="font-size:8px">Orbit Player</span>
     </div>
-    <button id="btn-download" class="ctrl-btn" style="color:#6e6875;background:transparent;border-color:transparent" title="Download">
+    <button id="btn-download" class="ctrl-btn" style="background:transparent;border-color:transparent" title="Download">
       <span class="material-symbols-outlined" style="font-size:15px">download</span>
     </button>
   </div>
 
-  <!-- track info + volume -->
   <div id="fp-info">
     <div id="fp-art">
       <span class="material-symbols-outlined" style="font-size:18px;color:var(--jestr-purple);font-variation-settings:'FILL' 1">music_note</span>
@@ -347,32 +332,30 @@
     </div>
   </div>
 
-  <!-- controls: shuffle | prev | -10 | PLAY | +10 | next | repeat -->
   <div id="fp-controls">
-    <button id="btn-shuffle" class="ctrl-btn" style="color:#6e6875" title="Shuffle">
+    <button id="btn-shuffle" class="ctrl-btn" title="Shuffle">
       <span class="material-symbols-outlined" style="font-size:16px">shuffle</span>
     </button>
-    <button id="btn-prev" class="ctrl-btn" style="color:var(--jestr-blue)" title="Prev">
+    <button id="btn-prev" class="ctrl-btn" title="Prev">
       <span class="material-symbols-outlined" style="font-size:18px">skip_previous</span>
     </button>
-    <button id="btn-back10" class="ctrl-btn" style="color:#a09aad" title="-10s">
+    <button id="btn-back10" class="ctrl-btn" title="-10s">
       <span class="material-symbols-outlined" style="font-size:17px">replay_10</span>
     </button>
     <button id="btn-play" class="play-btn" style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
       <span id="play-icon" class="material-symbols-outlined text-white" style="font-size:22px;font-variation-settings:'FILL' 1">play_arrow</span>
     </button>
-    <button id="btn-fwd10" class="ctrl-btn" style="color:#a09aad" title="+10s">
+    <button id="btn-fwd10" class="ctrl-btn" title="+10s">
       <span class="material-symbols-outlined" style="font-size:17px">forward_10</span>
     </button>
-    <button id="btn-next" class="ctrl-btn" style="color:var(--jestr-blue)" title="Next">
+    <button id="btn-next" class="ctrl-btn" title="Next">
       <span class="material-symbols-outlined" style="font-size:18px">skip_next</span>
     </button>
-    <button id="btn-repeat" class="ctrl-btn" style="color:#6e6875" title="Repeat">
+    <button id="btn-repeat" class="ctrl-btn" title="Repeat">
       <span id="repeat-icon" class="material-symbols-outlined" style="font-size:16px">repeat</span>
     </button>
   </div>
 
-  <!-- progress: times INSIDE the bar container -->
   <div id="fp-progress">
     <span id="time-current" class="tape-counter" style="width:30px;flex-shrink:0;font-size:8px">0:00</span>
     <div class="progress-wrap" id="progress-rail">
@@ -428,20 +411,18 @@
 
   const audio=document.getElementById("audio-player");
   let currentIndex=0,isPlaying=false,isShuffle=false,repeatMode=0;
-  let seekOnReady=null;
-  let isSeeking=false; // true while user drags the scrubber
+  let seekOnReady=null,isSeeking=false;
 
   /* ── DRAG + CORNER RESIZE ── */
   (function(){
     const fp=document.getElementById("float-player");
     const handle=document.getElementById("fp-handle");
     let mode=null,startX,startY,startL,startT,startW,startH;
-
     function getRect(){return fp.getBoundingClientRect();}
     function pinPosition(){
       if(!fp.classList.contains("is-positioned")){
         const r=getRect();
-        fp.style.transform="none";fp.style.bottom="";
+        fp.style.bottom="";fp.style.transform="";
         fp.style.left=r.left+"px";fp.style.top=r.top+"px";
         fp.style.width=r.width+"px";
         fp.classList.add("is-positioned");
@@ -461,8 +442,7 @@
       const cx=e.touches?e.touches[0].clientX:e.clientX;
       const cy=e.touches?e.touches[0].clientY:e.clientY;
       const dx=cx-startX,dy=cy-startY;
-      const mw=280,mh=120;
-      const vw=window.innerWidth,vh=window.innerHeight;
+      const mw=280,mh=120,vw=window.innerWidth,vh=window.innerHeight;
       if(mode==='drag'){
         fp.style.left=clamp(startL+dx,0,vw-startW)+"px";
         fp.style.top=clamp(startT+dy,0,vh-startH)+"px";
@@ -493,15 +473,9 @@
   function updateChroma(id,text){const el=document.getElementById(id);if(!el)return;el.textContent=text;el.setAttribute("data-text",text);}
   function downloadCurrent(){const t=TRACKS[currentIndex];const a=document.createElement("a");a.href=t.file;a.download=t.file;a.click();}
 
-  /* ── SEEK ──
-     seekOnReady stores a target fraction [0,1].
-     We apply it once we have duration. Fires on both loadedmetadata + canplay.
-     isSeeking flag prevents timeupdate from clobbering the scrubber while dragging.
-  */
   function applySavedSeek(){
     if(seekOnReady!==null&&audio.readyState>=1&&isFinite(audio.duration)&&audio.duration>0){
-      audio.currentTime=seekOnReady*audio.duration;
-      seekOnReady=null;
+      audio.currentTime=seekOnReady*audio.duration;seekOnReady=null;
     }
   }
   audio.addEventListener("loadedmetadata",applySavedSeek);
@@ -511,38 +485,28 @@
     document.getElementById("progress-fill").style.width=pct+"%";
     document.getElementById("progress-thumb").style.left=pct+"%";
   }
-
-  /* Core seek — never calls audio.load(), just sets currentTime */
   function seekToPct(pct){
     pct=Math.max(0,Math.min(1,pct));
     setProgress(pct*100);
     if(audio.readyState>=1&&isFinite(audio.duration)&&audio.duration>0){
-      audio.currentTime=pct*audio.duration;
-      seekOnReady=null;
-    } else {
-      seekOnReady=pct;
-    }
+      audio.currentTime=pct*audio.duration;seekOnReady=null;
+    } else {seekOnReady=pct;}
   }
-
   function skip(sec){
-    if(audio.readyState>=1&&isFinite(audio.duration)){
+    if(audio.readyState>=1&&isFinite(audio.duration))
       audio.currentTime=Math.max(0,Math.min(audio.duration,(audio.currentTime||0)+sec));
-    }
   }
-
   function clientXToFraction(clientX,rail){
     const r=rail.getBoundingClientRect();
     return Math.max(0,Math.min(1,(clientX-r.left)/r.width));
   }
-
   function makeScrubber(railId){
-    const rail=document.getElementById(railId);
-    let drag=false;
-    function startDrag(clientX){drag=true;isSeeking=true;rail.classList.add("dragging");seekToPct(clientXToFraction(clientX,rail));}
-    function moveDrag(clientX){if(!drag)return;seekToPct(clientXToFraction(clientX,rail));}
+    const rail=document.getElementById(railId);let drag=false;
+    function startDrag(x){drag=true;isSeeking=true;rail.classList.add("dragging");seekToPct(clientXToFraction(x,rail));}
+    function moveDrag(x){if(!drag)return;seekToPct(clientXToFraction(x,rail));}
     function endDrag(){if(!drag)return;drag=false;isSeeking=false;rail.classList.remove("dragging");}
     rail.addEventListener("mousedown",e=>{startDrag(e.clientX);e.preventDefault();});
-    window.addEventListener("mousemove",e=>{moveDrag(e.clientX);});
+    window.addEventListener("mousemove",e=>moveDrag(e.clientX));
     window.addEventListener("mouseup",endDrag);
     rail.addEventListener("touchstart",e=>{startDrag(e.touches[0].clientX);e.preventDefault();},{passive:false});
     window.addEventListener("touchmove",e=>{if(drag)moveDrag(e.touches[0].clientX);},{passive:true});
@@ -550,17 +514,11 @@
   }
   makeScrubber("progress-rail");
 
-  /* ── LOAD TRACK ──
-     Sets audio.src to the raw filename and calls audio.load().
-     Does NOT seek — just resets to 0.
-  */
   function loadTrack(index,autoplay=false){
     currentIndex=index;seekOnReady=null;isSeeking=false;
     const t=TRACKS[index];
-    audio.src=t.file; // raw filename, no encoding
-    audio.load();
-    updateChroma("focal-title",t.title);
-    updateChroma("focal-title-mobile",t.title);
+    audio.src=t.file;audio.load();
+    updateChroma("focal-title",t.title);updateChroma("focal-title-mobile",t.title);
     ["focal-artist","focal-artist-mobile"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=t.artist;});
     document.getElementById("fp-title").textContent=t.title;
     document.getElementById("fp-artist").textContent=t.artist;
@@ -573,7 +531,6 @@
     updatePlayIcons();
   }
 
-  /* ── VOLUME ── */
   function setVolume(pct){
     audio.volume=pct;
     document.getElementById("volume-fill").style.width=(pct*100)+"%";
@@ -587,7 +544,6 @@
     window.addEventListener("mouseup",()=>{drag=false;});
   })();
 
-  /* ── TIMEUPDATE ── */
   audio.addEventListener("timeupdate",()=>{
     if(!audio.duration||!isFinite(audio.duration))return;
     document.getElementById("time-current").textContent=fmt(audio.currentTime);
@@ -595,7 +551,6 @@
     if(!isSeeking)setProgress((audio.currentTime/audio.duration)*100);
   });
 
-  /* ── ENDED ── */
   audio.addEventListener("ended",()=>{
     if(repeatMode===2){audio.currentTime=0;audio.play();return;}
     if(repeatMode===1){loadTrack((currentIndex+1)%TRACKS.length,true);return;}
@@ -603,19 +558,17 @@
     else{isPlaying=false;updatePlayIcons();renderAll();}
   });
 
-  /* ── UI STATE ── */
   function updateRepeatUI(){
     const btn=document.getElementById("btn-repeat");
     const icon=document.getElementById("repeat-icon");
-    if(repeatMode===0){btn.style.color="#6e6875";icon.textContent="repeat";btn.title="Repeat: Off";}
-    else if(repeatMode===1){btn.style.color="var(--jestr-blue)";icon.textContent="repeat";btn.title="Repeat: All";}
+    if(repeatMode===0){btn.style.color="";icon.textContent="repeat";btn.title="Repeat: Off";}
+    else if(repeatMode===1){btn.style.color="#7EC8E3";icon.textContent="repeat";btn.title="Repeat: All";}
     else{btn.style.color="var(--jestr-red)";icon.textContent="repeat_one";btn.title="Repeat: One";}
   }
   function updatePlayIcons(){
     document.getElementById("play-icon").textContent=isPlaying?"pause":"play_arrow";
   }
 
-  /* ── RENDER ── */
   function trackHTML(t,i,isActive){
     return `<div class="track-item" data-index="${i}"
       style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;cursor:pointer;
@@ -658,7 +611,6 @@
     }
   }
 
-  /* ── CONTROLS ── */
   function togglePlay(){
     if(!audio.src||audio.src===window.location.href){loadTrack(0,true);return;}
     if(isPlaying){audio.pause();isPlaying=false;}else{audio.play();isPlaying=true;}
@@ -675,11 +627,10 @@
   document.getElementById("btn-download").addEventListener("click",downloadCurrent);
   document.getElementById("btn-shuffle").addEventListener("click",()=>{
     isShuffle=!isShuffle;
-    document.getElementById("btn-shuffle").style.color=isShuffle?"var(--jestr-blue)":"#6e6875";
+    document.getElementById("btn-shuffle").style.color=isShuffle?"#fff":"";
   });
   document.getElementById("btn-repeat").addEventListener("click",()=>{repeatMode=(repeatMode+1)%3;updateRepeatUI();});
 
-  /* ── SEARCH ── */
   document.getElementById("search-input").addEventListener("input",e=>{
     const q=e.target.value.toLowerCase();
     document.querySelectorAll(".track-item").forEach(el=>{
@@ -688,7 +639,6 @@
     });
   });
 
-  /* ── DRAWER ── */
   document.getElementById("open-drawer").addEventListener("click",()=>{
     document.getElementById("mobile-drawer").classList.add("open");
     document.getElementById("drawer-overlay").classList.add("open");
