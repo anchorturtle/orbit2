@@ -27,7 +27,7 @@
     border-radius: inherit;
   }
   .planet-glow {
-    filter: blur(80px);
+    filter: blur(60px);
     background: radial-gradient(circle, #6200ea 0%, #008080 100%);
     animation: pulse 8s infinite alternate;
   }
@@ -37,11 +37,28 @@
   }
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-  #progress-rail { cursor: pointer; }
-  #volume-rail { cursor: pointer; }
-  .track-item.active p.track-title { opacity: 1 !important; color: #e9e1de; }
-  .track-item.active p.track-artist { opacity: 1 !important; color: #89CFF0; }
+  #progress-rail, #volume-rail { cursor: pointer; }
   .track-item.active { background: rgba(30,27,25,0.6) !important; border-color: rgba(255,255,255,0.1) !important; }
+  .track-item.active .track-title { opacity: 1 !important; }
+  .track-item.active .track-artist { opacity: 1 !important; color: #89CFF0 !important; }
+
+  /* Mobile drawer */
+  #mobile-drawer {
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+  #mobile-drawer.open {
+    transform: translateX(0);
+  }
+  #drawer-overlay {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  #drawer-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
 </style>
 <script id="tailwind-config">
   tailwind.config = {
@@ -49,40 +66,36 @@
     theme: {
       extend: {
         colors: {
-          "surface-dim": "#161311", "on-background": "#e9e1de", "on-surface-variant": "#cbc3d9",
-          "on-secondary-fixed-variant": "#004f4f", "on-surface": "#e9e1de", "surface-bright": "#3c3836",
-          "on-tertiary": "#690100", "on-error-container": "#ffdad6", "surface": "#161311",
-          "on-tertiary-container": "#ffb4a8", "tertiary-fixed": "#ffdad4", "surface-variant": "#383432",
-          "primary": "#cfbcff", "on-tertiary-fixed-variant": "#930100", "surface-container-highest": "#383432",
-          "primary-fixed-dim": "#cfbcff", "on-secondary-fixed": "#002020", "inverse-on-surface": "#33302e",
-          "on-primary-container": "#cfbcff", "surface-container": "#221f1d", "error-container": "#93000a",
-          "inverse-surface": "#e9e1de", "on-error": "#690005", "tertiary-container": "#aa0100",
-          "surface-container-high": "#2d2927", "secondary-fixed": "#93f2f2", "secondary-container": "#007f7f",
-          "outline-variant": "#494456", "primary-container": "#6200ea", "on-primary": "#3a0092",
-          "on-secondary": "#003737", "background": "#161311", "surface-container-low": "#1e1b19",
-          "error": "#ffb4ab", "secondary-fixed-dim": "#76d6d5", "secondary": "#76d6d5",
-          "on-primary-fixed": "#22005d", "inverse-primary": "#6e25f6", "tertiary-fixed-dim": "#ffb4a8",
-          "surface-container-lowest": "#100e0c", "on-tertiary-fixed": "#410000",
-          "on-secondary-container": "#ddfffe", "outline": "#958da2", "primary-fixed": "#e9ddff",
-          "surface-tint": "#cfbcff", "on-primary-fixed-variant": "#5400cc",
+          "surface-dim": "#161311", "on-background": "#e9e1de",
+          "on-surface": "#e9e1de", "surface-bright": "#3c3836",
+          "surface": "#161311", "surface-variant": "#383432",
+          "primary": "#cfbcff", "surface-container-highest": "#383432",
+          "on-primary-container": "#cfbcff", "surface-container": "#221f1d",
+          "inverse-surface": "#e9e1de", "tertiary-container": "#aa0100",
+          "surface-container-high": "#2d2927", "secondary-container": "#007f7f",
+          "outline-variant": "#494456", "primary-container": "#6200ea",
+          "on-primary": "#3a0092", "on-secondary": "#003737",
+          "background": "#161311", "surface-container-low": "#1e1b19",
+          "secondary": "#76d6d5", "on-primary-fixed": "#22005d",
+          "inverse-primary": "#6e25f6", "surface-container-lowest": "#100e0c",
+          "on-secondary-container": "#ddfffe", "outline": "#958da2",
+          "primary-fixed": "#e9ddff", "surface-tint": "#cfbcff",
           "accent-blue": "#89CFF0", "accent-red": "#FF0000"
         },
-        fontFamily: { "headline": ["Plus Jakarta Sans"], "body": ["Plus Jakarta Sans"], "label": ["Plus Jakarta Sans"] },
+        fontFamily: { "headline": ["Plus Jakarta Sans"], "body": ["Plus Jakarta Sans"] },
         borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
       },
     },
   }
 </script>
 </head>
-<body class="bg-surface text-on-surface selection:bg-secondary selection:text-on-secondary">
+<body class="bg-surface text-on-surface">
 <div class="grain-overlay"></div>
-
-<!-- Hidden Audio Element -->
 <audio id="audio-player"></audio>
 
-<!-- SideNavBar -->
-<aside class="h-full w-72 fixed left-0 top-0 z-40 bg-surface-container-low flex flex-col p-6 gap-6 shadow-[1px_0_0_0_rgba(255,255,255,0.05)] container-texture">
-  <div class="flex flex-col gap-1 mb-4">
+<!-- ===================== DESKTOP SIDEBAR ===================== -->
+<aside id="desktop-sidebar" class="hidden md:flex h-full w-72 fixed left-0 top-0 z-40 bg-surface-container-low flex-col p-6 gap-6 shadow-[1px_0_0_0_rgba(255,255,255,0.05)] container-texture">
+  <div class="flex flex-col gap-1 mb-2">
     <h1 class="text-3xl font-black tracking-tighter text-primary-container italic">Orbit</h1>
     <p class="font-bold tracking-widest text-[10px] uppercase text-outline opacity-60">Cosmic High-Fidelity</p>
   </div>
@@ -91,46 +104,68 @@
       <span class="material-symbols-outlined">library_music</span><span>Tracks</span>
     </button>
   </nav>
-  <div class="h-px bg-outline/10 my-2"></div>
-  <div class="flex items-center justify-between px-2">
+  <div class="h-px bg-outline/10"></div>
+  <div class="flex items-center px-2">
     <span class="text-[10px] font-bold uppercase tracking-widest text-outline">Tracklist</span>
   </div>
-  <!-- Sidebar Track List -->
-  <div class="flex-1 overflow-y-auto no-scrollbar space-y-2 pr-1" id="sidebar-tracklist"></div>
+  <div class="flex-1 overflow-y-auto no-scrollbar space-y-1 pr-1" id="sidebar-tracklist"></div>
 </aside>
 
-<!-- TopNavBar -->
-<header class="fixed top-0 right-0 w-[calc(100%-18rem)] z-30 flex justify-between items-center px-12 py-8 bg-transparent">
-  <div class="flex items-center gap-2">
-    <span class="text-xs font-bold uppercase tracking-[0.3em] text-outline opacity-50">Stellar Navigation</span>
-  </div>
-  <div class="flex items-center gap-8">
-    <div class="relative group">
-      <input id="search-input" class="bg-surface-container border-none rounded-full px-8 py-2.5 w-80 text-sm focus:ring-2 focus:ring-primary/40 transition-all placeholder:text-outline/40 shadow-inner" placeholder="Search tracks..." type="text"/>
-      <span class="material-symbols-outlined absolute right-5 top-1/2 -translate-y-1/2 text-outline/40 scale-90">search</span>
+<!-- ===================== MOBILE DRAWER OVERLAY ===================== -->
+<div id="drawer-overlay" class="fixed inset-0 bg-black/60 z-40 md:hidden"></div>
+
+<!-- ===================== MOBILE DRAWER ===================== -->
+<aside id="mobile-drawer" class="fixed left-0 top-0 h-full w-72 z-50 bg-surface-container-low flex flex-col p-6 gap-5 md:hidden">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-black tracking-tighter text-primary-container italic">Orbit</h1>
+      <p class="font-bold tracking-widest text-[10px] uppercase text-outline opacity-60">Cosmic High-Fidelity</p>
     </div>
+    <button id="close-drawer" class="text-outline hover:text-primary">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  </div>
+  <div class="h-px bg-outline/10"></div>
+  <div class="flex items-center px-1">
+    <span class="text-[10px] font-bold uppercase tracking-widest text-outline">Tracklist</span>
+  </div>
+  <div class="flex-1 overflow-y-auto no-scrollbar space-y-1" id="mobile-tracklist"></div>
+</aside>
+
+<!-- ===================== MOBILE TOP BAR ===================== -->
+<header class="md:hidden fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-5 py-4 bg-surface-container-low/90 backdrop-blur-xl border-b border-white/5">
+  <button id="open-drawer" class="text-outline hover:text-primary">
+    <span class="material-symbols-outlined">menu</span>
+  </button>
+  <h1 class="text-xl font-black tracking-tighter text-primary-container italic">Orbit</h1>
+  <div class="w-8"></div>
+</header>
+
+<!-- ===================== DESKTOP TOP BAR ===================== -->
+<header class="hidden md:flex fixed top-0 right-0 w-[calc(100%-18rem)] z-30 justify-between items-center px-12 py-8 bg-transparent">
+  <span class="text-xs font-bold uppercase tracking-[0.3em] text-outline opacity-50">Stellar Navigation</span>
+  <div class="relative">
+    <input id="search-input" class="bg-surface-container border-none rounded-full px-8 py-2.5 w-80 text-sm focus:ring-2 focus:ring-primary/40 transition-all placeholder:text-outline/40 shadow-inner" placeholder="Search tracks..." type="text"/>
+    <span class="material-symbols-outlined absolute right-5 top-1/2 -translate-y-1/2 text-outline/40 scale-90">search</span>
   </div>
 </header>
 
-<!-- Main Content -->
-<main class="ml-72 h-screen pt-24 pb-32 px-12 relative flex items-center justify-center overflow-hidden">
-  <!-- Central Visualization Area -->
+<!-- ===================== DESKTOP MAIN ===================== -->
+<main class="hidden md:flex ml-72 h-screen pt-24 pb-32 px-12 items-center justify-center overflow-hidden relative">
   <div class="relative flex-1 flex items-center justify-center">
     <div class="absolute w-[700px] h-[700px] rounded-full border border-secondary/5 animate-[ping_10s_linear_infinite]"></div>
     <div class="absolute w-[500px] h-[500px] rounded-full border border-primary/5 animate-[ping_12s_linear_infinite_1s]"></div>
-    <div class="relative w-[450px] h-[450px]">
+    <div class="relative w-[420px] h-[420px]">
       <div class="planet-glow absolute inset-0 rounded-full"></div>
       <div class="absolute inset-0 rounded-full bg-surface-container-highest/20 backdrop-blur-2xl border border-white/5 overflow-hidden shadow-2xl">
         <div class="w-full h-full opacity-30" style="background-image: radial-gradient(#fff 1px, transparent 0); background-size: 10px 10px;"></div>
       </div>
       <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-8 z-10">
-        <h2 id="focal-title" class="text-5xl font-black italic tracking-tighter text-on-surface leading-none drop-shadow-2xl mb-4 uppercase">—</h2>
+        <h2 id="focal-title" class="text-5xl font-black italic tracking-tighter text-on-surface leading-none drop-shadow-2xl mb-3 uppercase">—</h2>
         <p id="focal-artist" class="text-accent-blue font-bold tracking-[0.4em] uppercase text-xs">Select a track</p>
       </div>
     </div>
   </div>
-
-  <!-- Up Next Sidebar -->
   <div class="w-80 flex flex-col gap-6 z-20">
     <div class="flex items-center justify-between border-b border-outline/10 pb-4">
       <span class="text-xs font-bold uppercase tracking-widest text-outline">Up Next</span>
@@ -140,57 +175,108 @@
   </div>
 </main>
 
-<!-- Bottom Player Toolbar -->
-<footer class="fixed bottom-0 left-0 w-full z-50 flex justify-center items-center pb-8 px-12">
+<!-- ===================== MOBILE MAIN ===================== -->
+<main class="md:hidden flex flex-col h-screen pt-16 pb-36 overflow-y-auto no-scrollbar">
+  <!-- Mini visualizer -->
+  <div class="flex flex-col items-center justify-center py-10 relative">
+    <div class="absolute w-64 h-64 rounded-full border border-secondary/5 animate-[ping_10s_linear_infinite]"></div>
+    <div class="relative w-48 h-48">
+      <div class="planet-glow absolute inset-0 rounded-full"></div>
+      <div class="absolute inset-0 rounded-full bg-surface-container-highest/20 backdrop-blur-2xl border border-white/5 overflow-hidden shadow-2xl">
+        <div class="w-full h-full opacity-20" style="background-image: radial-gradient(#fff 1px, transparent 0); background-size: 8px 8px;"></div>
+      </div>
+      <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-4 z-10">
+        <h2 id="focal-title-mobile" class="text-2xl font-black italic tracking-tighter text-on-surface leading-none mb-1 uppercase">—</h2>
+        <p id="focal-artist-mobile" class="text-accent-blue font-bold tracking-widest uppercase text-[9px]">Select a track</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Tracklist -->
+  <div class="px-5 pb-4">
+    <div class="flex items-center justify-between mb-4">
+      <span class="text-[10px] font-bold uppercase tracking-widest text-outline">All Tracks</span>
+    </div>
+    <div class="space-y-2" id="mobile-main-tracklist"></div>
+  </div>
+</main>
+
+<!-- ===================== DESKTOP FOOTER ===================== -->
+<footer class="hidden md:flex fixed bottom-0 left-0 w-full z-50 justify-center items-center pb-8 px-12">
   <div class="w-full max-w-7xl rounded-[2.5rem] px-10 py-5 bg-surface-container-high/80 backdrop-blur-3xl shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] border border-white/5 flex justify-between items-center container-texture">
-    <!-- Now Playing Meta -->
     <div class="flex items-center gap-5 w-72">
-      <div class="w-14 h-14 rounded-2xl bg-surface-container-highest flex items-center justify-center overflow-hidden shadow-lg border border-white/5">
-        <span id="footer-icon" class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings:'FILL' 1;">music_note</span>
+      <div class="w-14 h-14 rounded-2xl bg-surface-container-highest flex items-center justify-center shadow-lg border border-white/5">
+        <span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings:'FILL' 1;">music_note</span>
       </div>
       <div>
-        <p id="footer-title" class="text-sm font-black text-on-surface uppercase tracking-tight">No Track Selected</p>
+        <p id="footer-title" class="text-sm font-black text-on-surface uppercase tracking-tight">No Track</p>
         <p id="footer-artist" class="text-[10px] text-accent-blue font-bold uppercase tracking-widest mt-0.5">—</p>
       </div>
     </div>
-    <!-- Player Controls -->
     <div class="flex flex-col items-center gap-3 flex-1 max-w-xl">
       <div class="flex items-center gap-8">
-        <button id="btn-shuffle" class="text-outline hover:text-accent-red transition-all"><span class="material-symbols-outlined text-xl">shuffle</span></button>
+        <button id="btn-shuffle" class="text-outline hover:text-accent-blue transition-all"><span class="material-symbols-outlined text-xl">shuffle</span></button>
         <button id="btn-prev" class="text-accent-blue hover:text-primary transition-all"><span class="material-symbols-outlined text-2xl">skip_previous</span></button>
-        <button id="btn-play" class="w-14 h-14 rounded-full bg-gradient-to-br from-primary-container to-secondary-container text-white flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-xl shadow-primary/20">
+        <button id="btn-play" class="w-14 h-14 rounded-full bg-gradient-to-br from-primary-container to-secondary-container text-white flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-xl">
           <span id="play-icon" class="material-symbols-outlined text-3xl" style="font-variation-settings:'FILL' 1;">play_arrow</span>
         </button>
         <button id="btn-next" class="text-accent-blue hover:text-primary transition-all"><span class="material-symbols-outlined text-2xl">skip_next</span></button>
-        <button id="btn-repeat" class="text-outline hover:text-accent-red transition-all"><span class="material-symbols-outlined text-xl">repeat</span></button>
+        <button id="btn-repeat" class="text-outline hover:text-accent-blue transition-all"><span class="material-symbols-outlined text-xl">repeat</span></button>
       </div>
-      <!-- Progress Rail -->
       <div class="w-full flex items-center gap-3">
         <span id="time-current" class="text-[9px] font-bold text-outline/60 tabular-nums">0:00</span>
         <div id="progress-rail" class="flex-1 h-1.5 bg-surface-container rounded-full overflow-hidden relative">
-          <div id="progress-fill" class="absolute left-0 top-0 h-full w-0 bg-gradient-to-r from-primary to-secondary rounded-full transition-none"></div>
+          <div id="progress-fill" class="absolute left-0 top-0 h-full w-0 bg-gradient-to-r from-primary to-secondary rounded-full"></div>
         </div>
         <span id="time-total" class="text-[9px] font-bold text-outline/60 tabular-nums">0:00</span>
       </div>
     </div>
-    <!-- Utility Controls -->
-    <div class="flex items-center gap-6 w-72 justify-end">
-      <div class="flex items-center gap-3">
-        <span class="material-symbols-outlined text-outline text-lg">volume_up</span>
-        <div id="volume-rail" class="w-20 h-1.5 bg-surface-container rounded-full overflow-hidden relative cursor-pointer">
-          <div id="volume-fill" class="absolute left-0 top-0 h-full w-[80%] bg-accent-blue rounded-full"></div>
-        </div>
+    <div class="flex items-center gap-4 w-72 justify-end">
+      <span class="material-symbols-outlined text-outline text-lg">volume_up</span>
+      <div id="volume-rail" class="w-20 h-1.5 bg-surface-container rounded-full overflow-hidden relative cursor-pointer">
+        <div id="volume-fill" class="absolute left-0 top-0 h-full w-[80%] bg-accent-blue rounded-full"></div>
       </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ===================== MOBILE FOOTER ===================== -->
+<footer class="md:hidden fixed bottom-0 left-0 right-0 z-50 px-4 pb-6 pt-2">
+  <div class="rounded-3xl px-5 py-4 bg-surface-container-high/90 backdrop-blur-3xl shadow-[0_16px_48px_-8px_rgba(0,0,0,0.6)] border border-white/5 container-texture">
+    <!-- Track info + main controls -->
+    <div class="flex items-center gap-4 mb-3">
+      <div class="w-11 h-11 rounded-xl bg-surface-container-highest flex items-center justify-center border border-white/5 flex-shrink-0">
+        <span class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings:'FILL' 1;">music_note</span>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p id="mob-footer-title" class="text-xs font-black text-on-surface uppercase tracking-tight truncate">No Track</p>
+        <p id="mob-footer-artist" class="text-[9px] text-accent-blue font-bold uppercase tracking-widest truncate">—</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <button id="mob-btn-prev" class="text-accent-blue"><span class="material-symbols-outlined text-xl">skip_previous</span></button>
+        <button id="mob-btn-play" class="w-11 h-11 rounded-full bg-gradient-to-br from-primary-container to-secondary-container text-white flex items-center justify-center active:scale-95 transition-all shadow-lg">
+          <span id="mob-play-icon" class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1;">play_arrow</span>
+        </button>
+        <button id="mob-btn-next" class="text-accent-blue"><span class="material-symbols-outlined text-xl">skip_next</span></button>
+      </div>
+    </div>
+    <!-- Progress -->
+    <div class="flex items-center gap-2">
+      <span id="mob-time-current" class="text-[9px] font-bold text-outline/60 tabular-nums w-7">0:00</span>
+      <div id="mob-progress-rail" class="flex-1 h-1 bg-surface-container rounded-full overflow-hidden relative cursor-pointer">
+        <div id="mob-progress-fill" class="absolute left-0 top-0 h-full w-0 bg-gradient-to-r from-primary to-secondary rounded-full"></div>
+      </div>
+      <span id="mob-time-total" class="text-[9px] font-bold text-outline/60 tabular-nums w-7 text-right">0:00</span>
     </div>
   </div>
 </footer>
 
 <script>
   const TRACKS = [
-    { title: "Geronimo", artist: "jestR", file: "11 - Geronimo- jestR - 2020.mp3" },
-    { title: "Follow The Flow", artist: "Unknown", file: "Mp3-FollowTheFlow.mp3" },
-    { title: "Soul Seer", artist: "Unknown", file: "Mp3-SoulSeer.mp3" },
-    { title: "Peace", artist: "Unknown", file: "Peace.mp3" },
+    { title: "Geronimo",      artist: "jestR",  file: "11 - Geronimo- jestR - 2020.mp3" },
+    { title: "Follow The Flow", artist: "Orbit", file: "Mp3-FollowTheFlow.mp3" },
+    { title: "Soul Seer",     artist: "Orbit",  file: "Mp3-SoulSeer.mp3" },
+    { title: "Peace",         artist: "Orbit",  file: "Peace.mp3" },
   ];
 
   const audio = document.getElementById("audio-player");
@@ -200,7 +286,7 @@
   let isRepeat = false;
 
   function fmt(s) {
-    if (isNaN(s)) return "0:00";
+    if (isNaN(s) || !isFinite(s)) return "0:00";
     const m = Math.floor(s / 60), sec = Math.floor(s % 60);
     return `${m}:${sec.toString().padStart(2, "0")}`;
   }
@@ -209,113 +295,143 @@
     currentIndex = index;
     const t = TRACKS[index];
     audio.src = encodeURIComponent(t.file);
-    document.getElementById("focal-title").textContent = t.title;
-    document.getElementById("focal-artist").textContent = t.artist;
+    // Desktop focal
+    if (document.getElementById("focal-title")) document.getElementById("focal-title").textContent = t.title;
+    if (document.getElementById("focal-artist")) document.getElementById("focal-artist").textContent = t.artist;
+    // Mobile focal
+    document.getElementById("focal-title-mobile").textContent = t.title;
+    document.getElementById("focal-artist-mobile").textContent = t.artist;
+    // Desktop footer
     document.getElementById("footer-title").textContent = t.title;
     document.getElementById("footer-artist").textContent = t.artist;
-    document.getElementById("progress-fill").style.width = "0%";
-    document.getElementById("time-current").textContent = "0:00";
-    document.getElementById("time-total").textContent = "0:00";
-    renderUpNext();
-    renderSidebar();
-    if (autoplay) { audio.play(); isPlaying = true; updatePlayIcon(); }
-    else { isPlaying = false; updatePlayIcon(); }
+    // Mobile footer
+    document.getElementById("mob-footer-title").textContent = t.title;
+    document.getElementById("mob-footer-artist").textContent = t.artist;
+    // Reset progress
+    ["progress-fill","mob-progress-fill"].forEach(id => document.getElementById(id).style.width = "0%");
+    ["time-current","mob-time-current"].forEach(id => document.getElementById(id).textContent = "0:00");
+    ["time-total","mob-time-total"].forEach(id => document.getElementById(id).textContent = "0:00");
+    renderAll();
+    if (autoplay) { audio.play(); isPlaying = true; }
+    else { isPlaying = false; }
+    updatePlayIcons();
   }
 
-  function updatePlayIcon() {
-    document.getElementById("play-icon").textContent = isPlaying ? "pause" : "play_arrow";
+  function updatePlayIcons() {
+    const icon = isPlaying ? "pause" : "play_arrow";
+    document.getElementById("play-icon").textContent = icon;
+    document.getElementById("mob-play-icon").textContent = icon;
   }
 
-  function renderSidebar() {
-    const el = document.getElementById("sidebar-tracklist");
-    el.innerHTML = TRACKS.map((t, i) => `
-      <div class="track-item flex items-center gap-3 p-3 rounded-xl cursor-pointer hover:bg-surface-container-high transition-all ${i === currentIndex ? 'active border border-white/10' : ''}" data-index="${i}">
-        <span class="text-[9px] font-bold text-outline w-4">${String(i+1).padStart(2,"0")}</span>
-        <div class="flex-1 min-w-0">
-          <p class="track-title text-xs font-bold truncate ${i === currentIndex ? '' : 'opacity-60'}">${t.title}</p>
-          <p class="track-artist text-[9px] uppercase font-bold truncate ${i === currentIndex ? 'text-accent-blue' : 'text-outline opacity-40'}">${t.artist}</p>
-        </div>
-        ${i === currentIndex && isPlaying ? '<span class="material-symbols-outlined text-primary text-xs">equalizer</span>' : ''}
+  function trackHTML(t, i, isActive) {
+    return `<div class="track-item flex items-center gap-3 p-3 rounded-xl cursor-pointer hover:bg-surface-container-high transition-all border border-transparent ${isActive ? 'active' : ''}" data-index="${i}">
+      <span class="text-[9px] font-bold text-outline w-4">${String(i+1).padStart(2,"0")}</span>
+      <div class="flex-1 min-w-0">
+        <p class="track-title text-xs font-bold truncate ${isActive ? '' : 'opacity-60'}">${t.title}</p>
+        <p class="track-artist text-[9px] uppercase font-bold truncate ${isActive ? 'text-accent-blue' : 'text-outline opacity-40'}">${t.artist}</p>
       </div>
-    `).join("");
-    el.querySelectorAll(".track-item").forEach(el => {
-      el.addEventListener("click", () => loadTrack(parseInt(el.dataset.index), true));
-    });
+      ${isActive && isPlaying ? '<span class="material-symbols-outlined text-primary" style="font-size:14px">equalizer</span>' : ''}
+    </div>`;
   }
 
-  function renderUpNext() {
-    const el = document.getElementById("upnext-list");
-    const next = [];
-    for (let i = 1; i <= 3; i++) {
-      const idx = (currentIndex + i) % TRACKS.length;
-      next.push({ ...TRACKS[idx], idx });
+  function renderAll() {
+    const html = TRACKS.map((t, i) => trackHTML(t, i, i === currentIndex)).join("");
+    ["sidebar-tracklist","mobile-tracklist","mobile-main-tracklist"].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.innerHTML = html;
+      el.querySelectorAll(".track-item").forEach(el => {
+        el.addEventListener("click", () => {
+          loadTrack(parseInt(el.dataset.index), true);
+          // close mobile drawer if open
+          document.getElementById("mobile-drawer").classList.remove("open");
+          document.getElementById("drawer-overlay").classList.remove("open");
+        });
+      });
+    });
+    // Up next
+    const upnext = document.getElementById("upnext-list");
+    if (upnext) {
+      upnext.innerHTML = [1,2,3].map(i => {
+        const idx = (currentIndex + i) % TRACKS.length;
+        const t = TRACKS[idx];
+        return `<div class="flex items-center gap-4 p-4 rounded-2xl hover:bg-surface-container-high/40 transition-all cursor-pointer" data-index="${idx}">
+          <span class="text-[10px] font-bold text-outline">${String(i).padStart(2,"0")}</span>
+          <div class="flex-1">
+            <p class="text-sm font-bold text-on-surface opacity-60">${t.title.toUpperCase()}</p>
+            <p class="text-[10px] text-outline uppercase font-bold opacity-40">${t.artist.toUpperCase()}</p>
+          </div>
+        </div>`;
+      }).join("");
+      upnext.querySelectorAll("[data-index]").forEach(el => {
+        el.addEventListener("click", () => loadTrack(parseInt(el.dataset.index), true));
+      });
     }
-    el.innerHTML = next.map((t, pos) => `
-      <div class="group flex items-center gap-4 p-4 rounded-2xl bg-transparent hover:bg-surface-container-high/40 transition-all cursor-pointer" data-index="${t.idx}">
-        <span class="text-[10px] font-bold text-outline">${String(pos+1).padStart(2,"0")}</span>
-        <div class="flex-1">
-          <p class="text-sm font-bold text-on-surface opacity-60">${t.title.toUpperCase()}</p>
-          <p class="text-[10px] text-outline uppercase font-bold opacity-40">${t.artist.toUpperCase()}</p>
-        </div>
-      </div>
-    `).join("");
-    el.querySelectorAll("[data-index]").forEach(el => {
-      el.addEventListener("click", () => loadTrack(parseInt(el.dataset.index), true));
-    });
   }
 
-  // Play / Pause
-  document.getElementById("btn-play").addEventListener("click", () => {
-    if (!audio.src || audio.src === window.location.href) { loadTrack(0, true); return; }
-    if (isPlaying) { audio.pause(); isPlaying = false; }
-    else { audio.play(); isPlaying = true; }
-    updatePlayIcon();
-    renderSidebar();
-  });
-
-  // Prev / Next
-  document.getElementById("btn-prev").addEventListener("click", () => {
-    if (audio.currentTime > 3) { audio.currentTime = 0; return; }
-    loadTrack((currentIndex - 1 + TRACKS.length) % TRACKS.length, isPlaying);
-  });
-  document.getElementById("btn-next").addEventListener("click", () => {
-    const next = isShuffle ? Math.floor(Math.random() * TRACKS.length) : (currentIndex + 1) % TRACKS.length;
-    loadTrack(next, isPlaying);
-  });
-
-  // Shuffle
+  // Desktop controls
+  document.getElementById("btn-play").addEventListener("click", togglePlay);
+  document.getElementById("btn-prev").addEventListener("click", prevTrack);
+  document.getElementById("btn-next").addEventListener("click", nextTrack);
   document.getElementById("btn-shuffle").addEventListener("click", () => {
     isShuffle = !isShuffle;
     document.getElementById("btn-shuffle").classList.toggle("text-accent-blue", isShuffle);
     document.getElementById("btn-shuffle").classList.toggle("text-outline", !isShuffle);
   });
-
-  // Repeat
   document.getElementById("btn-repeat").addEventListener("click", () => {
     isRepeat = !isRepeat;
     document.getElementById("btn-repeat").classList.toggle("text-accent-blue", isRepeat);
     document.getElementById("btn-repeat").classList.toggle("text-outline", !isRepeat);
   });
 
-  // Progress
+  // Mobile controls
+  document.getElementById("mob-btn-play").addEventListener("click", togglePlay);
+  document.getElementById("mob-btn-prev").addEventListener("click", prevTrack);
+  document.getElementById("mob-btn-next").addEventListener("click", nextTrack);
+
+  function togglePlay() {
+    if (!audio.src || audio.src === window.location.href) { loadTrack(0, true); return; }
+    if (isPlaying) { audio.pause(); isPlaying = false; }
+    else { audio.play(); isPlaying = true; }
+    updatePlayIcons();
+    renderAll();
+  }
+  function prevTrack() {
+    if (audio.currentTime > 3) { audio.currentTime = 0; return; }
+    loadTrack((currentIndex - 1 + TRACKS.length) % TRACKS.length, isPlaying);
+  }
+  function nextTrack() {
+    const next = isShuffle ? Math.floor(Math.random() * TRACKS.length) : (currentIndex + 1) % TRACKS.length;
+    loadTrack(next, isPlaying);
+  }
+
+  // Progress sync
   audio.addEventListener("timeupdate", () => {
     if (!audio.duration) return;
     const pct = (audio.currentTime / audio.duration) * 100;
     document.getElementById("progress-fill").style.width = pct + "%";
-    document.getElementById("time-current").textContent = fmt(audio.currentTime);
-    document.getElementById("time-total").textContent = fmt(audio.duration);
+    document.getElementById("mob-progress-fill").style.width = pct + "%";
+    const cur = fmt(audio.currentTime), tot = fmt(audio.duration);
+    document.getElementById("time-current").textContent = cur;
+    document.getElementById("mob-time-current").textContent = cur;
+    document.getElementById("time-total").textContent = tot;
+    document.getElementById("mob-time-total").textContent = tot;
   });
 
+  // Scrub desktop
   document.getElementById("progress-rail").addEventListener("click", (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const pct = (e.clientX - rect.left) / rect.width;
-    audio.currentTime = pct * audio.duration;
+    const r = e.currentTarget.getBoundingClientRect();
+    audio.currentTime = ((e.clientX - r.left) / r.width) * audio.duration;
   });
-
+  // Scrub mobile
+  document.getElementById("mob-progress-rail").addEventListener("click", (e) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    audio.currentTime = ((e.clientX - r.left) / r.width) * audio.duration;
+  });
   // Volume
   document.getElementById("volume-rail").addEventListener("click", (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const vol = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    const r = e.currentTarget.getBoundingClientRect();
+    const vol = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
     audio.volume = vol;
     document.getElementById("volume-fill").style.width = (vol * 100) + "%";
   });
@@ -323,19 +439,29 @@
   // Auto advance
   audio.addEventListener("ended", () => {
     if (isRepeat) { audio.play(); return; }
-    const next = isShuffle ? Math.floor(Math.random() * TRACKS.length) : (currentIndex + 1) % TRACKS.length;
-    loadTrack(next, true);
+    nextTrack();
   });
 
   // Search
   document.getElementById("search-input").addEventListener("input", (e) => {
     const q = e.target.value.toLowerCase();
     document.querySelectorAll(".track-item").forEach(el => {
-      const i = parseInt(el.dataset.index);
-      const t = TRACKS[i];
+      const t = TRACKS[parseInt(el.dataset.index)];
       el.style.display = (t.title.toLowerCase().includes(q) || t.artist.toLowerCase().includes(q)) ? "" : "none";
     });
   });
+
+  // Mobile drawer
+  document.getElementById("open-drawer").addEventListener("click", () => {
+    document.getElementById("mobile-drawer").classList.add("open");
+    document.getElementById("drawer-overlay").classList.add("open");
+  });
+  document.getElementById("close-drawer").addEventListener("click", closeDrawer);
+  document.getElementById("drawer-overlay").addEventListener("click", closeDrawer);
+  function closeDrawer() {
+    document.getElementById("mobile-drawer").classList.remove("open");
+    document.getElementById("drawer-overlay").classList.remove("open");
+  }
 
   // Init
   loadTrack(0, false);
