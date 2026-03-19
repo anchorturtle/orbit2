@@ -41,24 +41,13 @@
   .track-item.active { background: rgba(30,27,25,0.6) !important; border-color: rgba(255,255,255,0.1) !important; }
   .track-item.active .track-title { opacity: 1 !important; }
   .track-item.active .track-artist { opacity: 1 !important; color: #89CFF0 !important; }
-
-  /* Mobile drawer */
   #mobile-drawer {
     transform: translateX(-100%);
     transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
   }
-  #mobile-drawer.open {
-    transform: translateX(0);
-  }
-  #drawer-overlay {
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s;
-  }
-  #drawer-overlay.open {
-    opacity: 1;
-    pointer-events: all;
-  }
+  #mobile-drawer.open { transform: translateX(0); }
+  #drawer-overlay { opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+  #drawer-overlay.open { opacity: 1; pointer-events: all; }
 </style>
 <script id="tailwind-config">
   tailwind.config = {
@@ -93,7 +82,7 @@
 <div class="grain-overlay"></div>
 <audio id="audio-player"></audio>
 
-<!-- ===================== DESKTOP SIDEBAR ===================== -->
+<!-- DESKTOP SIDEBAR -->
 <aside id="desktop-sidebar" class="hidden md:flex h-full w-72 fixed left-0 top-0 z-40 bg-surface-container-low flex-col p-6 gap-6 shadow-[1px_0_0_0_rgba(255,255,255,0.05)] container-texture">
   <div class="flex flex-col gap-1 mb-2">
     <h1 class="text-3xl font-black tracking-tighter text-primary-container italic">Orbit</h1>
@@ -111,10 +100,10 @@
   <div class="flex-1 overflow-y-auto no-scrollbar space-y-1 pr-1" id="sidebar-tracklist"></div>
 </aside>
 
-<!-- ===================== MOBILE DRAWER OVERLAY ===================== -->
+<!-- MOBILE DRAWER OVERLAY -->
 <div id="drawer-overlay" class="fixed inset-0 bg-black/60 z-40 md:hidden"></div>
 
-<!-- ===================== MOBILE DRAWER ===================== -->
+<!-- MOBILE DRAWER -->
 <aside id="mobile-drawer" class="fixed left-0 top-0 h-full w-72 z-50 bg-surface-container-low flex flex-col p-6 gap-5 md:hidden">
   <div class="flex items-center justify-between">
     <div>
@@ -132,7 +121,7 @@
   <div class="flex-1 overflow-y-auto no-scrollbar space-y-1" id="mobile-tracklist"></div>
 </aside>
 
-<!-- ===================== MOBILE TOP BAR ===================== -->
+<!-- MOBILE TOP BAR -->
 <header class="md:hidden fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-5 py-4 bg-surface-container-low/90 backdrop-blur-xl border-b border-white/5">
   <button id="open-drawer" class="text-outline hover:text-primary">
     <span class="material-symbols-outlined">menu</span>
@@ -141,7 +130,7 @@
   <div class="w-8"></div>
 </header>
 
-<!-- ===================== DESKTOP TOP BAR ===================== -->
+<!-- DESKTOP TOP BAR -->
 <header class="hidden md:flex fixed top-0 right-0 w-[calc(100%-18rem)] z-30 justify-between items-center px-12 py-8 bg-transparent">
   <span class="text-xs font-bold uppercase tracking-[0.3em] text-outline opacity-50">Stellar Navigation</span>
   <div class="relative">
@@ -150,7 +139,7 @@
   </div>
 </header>
 
-<!-- ===================== DESKTOP MAIN ===================== -->
+<!-- DESKTOP MAIN -->
 <main class="hidden md:flex ml-72 h-screen pt-24 pb-32 px-12 items-center justify-center overflow-hidden relative">
   <div class="relative flex-1 flex items-center justify-center">
     <div class="absolute w-[700px] h-[700px] rounded-full border border-secondary/5 animate-[ping_10s_linear_infinite]"></div>
@@ -175,9 +164,8 @@
   </div>
 </main>
 
-<!-- ===================== MOBILE MAIN ===================== -->
-<main class="md:hidden flex flex-col h-screen pt-16 pb-36 overflow-y-auto no-scrollbar">
-  <!-- Mini visualizer -->
+<!-- MOBILE MAIN -->
+<main class="md:hidden flex flex-col h-screen pt-16 pb-40 overflow-y-auto no-scrollbar">
   <div class="flex flex-col items-center justify-center py-10 relative">
     <div class="absolute w-64 h-64 rounded-full border border-secondary/5 animate-[ping_10s_linear_infinite]"></div>
     <div class="relative w-48 h-48">
@@ -191,19 +179,16 @@
       </div>
     </div>
   </div>
-
-  <!-- Mobile Tracklist -->
   <div class="px-5 pb-4">
-    <div class="flex items-center justify-between mb-4">
-      <span class="text-[10px] font-bold uppercase tracking-widest text-outline">All Tracks</span>
-    </div>
+    <span class="text-[10px] font-bold uppercase tracking-widest text-outline block mb-4">All Tracks</span>
     <div class="space-y-2" id="mobile-main-tracklist"></div>
   </div>
 </main>
 
-<!-- ===================== DESKTOP FOOTER ===================== -->
+<!-- DESKTOP FOOTER -->
 <footer class="hidden md:flex fixed bottom-0 left-0 w-full z-50 justify-center items-center pb-8 px-12">
   <div class="w-full max-w-7xl rounded-[2.5rem] px-10 py-5 bg-surface-container-high/80 backdrop-blur-3xl shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] border border-white/5 flex justify-between items-center container-texture">
+    <!-- Now playing -->
     <div class="flex items-center gap-5 w-72">
       <div class="w-14 h-14 rounded-2xl bg-surface-container-highest flex items-center justify-center shadow-lg border border-white/5">
         <span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings:'FILL' 1;">music_note</span>
@@ -213,6 +198,7 @@
         <p id="footer-artist" class="text-[10px] text-accent-blue font-bold uppercase tracking-widest mt-0.5">—</p>
       </div>
     </div>
+    <!-- Controls -->
     <div class="flex flex-col items-center gap-3 flex-1 max-w-xl">
       <div class="flex items-center gap-8">
         <button id="btn-shuffle" class="text-outline hover:text-accent-blue transition-all"><span class="material-symbols-outlined text-xl">shuffle</span></button>
@@ -231,20 +217,23 @@
         <span id="time-total" class="text-[9px] font-bold text-outline/60 tabular-nums">0:00</span>
       </div>
     </div>
-    <div class="flex items-center gap-4 w-72 justify-end">
+    <!-- Utility: volume + download -->
+    <div class="flex items-center gap-5 w-72 justify-end">
       <span class="material-symbols-outlined text-outline text-lg">volume_up</span>
       <div id="volume-rail" class="w-20 h-1.5 bg-surface-container rounded-full overflow-hidden relative cursor-pointer">
         <div id="volume-fill" class="absolute left-0 top-0 h-full w-[80%] bg-accent-blue rounded-full"></div>
       </div>
+      <button id="btn-download" title="Download current track" class="text-outline hover:text-accent-blue transition-all hover:scale-110">
+        <span class="material-symbols-outlined">download</span>
+      </button>
     </div>
   </div>
 </footer>
 
-<!-- ===================== MOBILE FOOTER ===================== -->
+<!-- MOBILE FOOTER -->
 <footer class="md:hidden fixed bottom-0 left-0 right-0 z-50 px-4 pb-6 pt-2">
   <div class="rounded-3xl px-5 py-4 bg-surface-container-high/90 backdrop-blur-3xl shadow-[0_16px_48px_-8px_rgba(0,0,0,0.6)] border border-white/5 container-texture">
-    <!-- Track info + main controls -->
-    <div class="flex items-center gap-4 mb-3">
+    <div class="flex items-center gap-3 mb-3">
       <div class="w-11 h-11 rounded-xl bg-surface-container-highest flex items-center justify-center border border-white/5 flex-shrink-0">
         <span class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings:'FILL' 1;">music_note</span>
       </div>
@@ -252,7 +241,10 @@
         <p id="mob-footer-title" class="text-xs font-black text-on-surface uppercase tracking-tight truncate">No Track</p>
         <p id="mob-footer-artist" class="text-[9px] text-accent-blue font-bold uppercase tracking-widest truncate">—</p>
       </div>
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2">
+        <button id="mob-btn-download" title="Download" class="text-outline hover:text-accent-blue transition-all">
+          <span class="material-symbols-outlined text-xl">download</span>
+        </button>
         <button id="mob-btn-prev" class="text-accent-blue"><span class="material-symbols-outlined text-xl">skip_previous</span></button>
         <button id="mob-btn-play" class="w-11 h-11 rounded-full bg-gradient-to-br from-primary-container to-secondary-container text-white flex items-center justify-center active:scale-95 transition-all shadow-lg">
           <span id="mob-play-icon" class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1;">play_arrow</span>
@@ -260,7 +252,6 @@
         <button id="mob-btn-next" class="text-accent-blue"><span class="material-symbols-outlined text-xl">skip_next</span></button>
       </div>
     </div>
-    <!-- Progress -->
     <div class="flex items-center gap-2">
       <span id="mob-time-current" class="text-[9px] font-bold text-outline/60 tabular-nums w-7">0:00</span>
       <div id="mob-progress-rail" class="flex-1 h-1 bg-surface-container rounded-full overflow-hidden relative cursor-pointer">
@@ -273,10 +264,10 @@
 
 <script>
   const TRACKS = [
-    { title: "Geronimo",      artist: "jestR",  file: "11 - Geronimo- jestR - 2020.mp3" },
-    { title: "Follow The Flow", artist: "Orbit", file: "Mp3-FollowTheFlow.mp3" },
-    { title: "Soul Seer",     artist: "Orbit",  file: "Mp3-SoulSeer.mp3" },
-    { title: "Peace",         artist: "Orbit",  file: "Peace.mp3" },
+    { title: "Geronimo",       artist: "jestR", file: "11 - Geronimo- jestR - 2020.mp3" },
+    { title: "Follow The Flow", artist: "jestR", file: "Mp3-FollowTheFlow.mp3" },
+    { title: "Soul Seer",      artist: "jestR", file: "Mp3-SoulSeer.mp3" },
+    { title: "Peace",          artist: "jestR", file: "Peace.mp3" },
   ];
 
   const audio = document.getElementById("audio-player");
@@ -291,26 +282,28 @@
     return `${m}:${sec.toString().padStart(2, "0")}`;
   }
 
+  function downloadCurrent() {
+    const t = TRACKS[currentIndex];
+    const a = document.createElement("a");
+    a.href = encodeURIComponent(t.file);
+    a.download = t.file;
+    a.click();
+  }
+
   function loadTrack(index, autoplay = false) {
     currentIndex = index;
     const t = TRACKS[index];
     audio.src = encodeURIComponent(t.file);
-    // Desktop focal
-    if (document.getElementById("focal-title")) document.getElementById("focal-title").textContent = t.title;
-    if (document.getElementById("focal-artist")) document.getElementById("focal-artist").textContent = t.artist;
-    // Mobile focal
+    document.getElementById("focal-title").textContent = t.title;
+    document.getElementById("focal-artist").textContent = t.artist;
     document.getElementById("focal-title-mobile").textContent = t.title;
     document.getElementById("focal-artist-mobile").textContent = t.artist;
-    // Desktop footer
     document.getElementById("footer-title").textContent = t.title;
     document.getElementById("footer-artist").textContent = t.artist;
-    // Mobile footer
     document.getElementById("mob-footer-title").textContent = t.title;
     document.getElementById("mob-footer-artist").textContent = t.artist;
-    // Reset progress
     ["progress-fill","mob-progress-fill"].forEach(id => document.getElementById(id).style.width = "0%");
-    ["time-current","mob-time-current"].forEach(id => document.getElementById(id).textContent = "0:00");
-    ["time-total","mob-time-total"].forEach(id => document.getElementById(id).textContent = "0:00");
+    ["time-current","mob-time-current","time-total","mob-time-total"].forEach(id => document.getElementById(id).textContent = "0:00");
     renderAll();
     if (autoplay) { audio.play(); isPlaying = true; }
     else { isPlaying = false; }
@@ -343,13 +336,10 @@
       el.querySelectorAll(".track-item").forEach(el => {
         el.addEventListener("click", () => {
           loadTrack(parseInt(el.dataset.index), true);
-          // close mobile drawer if open
-          document.getElementById("mobile-drawer").classList.remove("open");
-          document.getElementById("drawer-overlay").classList.remove("open");
+          closeDrawer();
         });
       });
     });
-    // Up next
     const upnext = document.getElementById("upnext-list");
     if (upnext) {
       upnext.innerHTML = [1,2,3].map(i => {
@@ -369,10 +359,15 @@
     }
   }
 
-  // Desktop controls
   document.getElementById("btn-play").addEventListener("click", togglePlay);
   document.getElementById("btn-prev").addEventListener("click", prevTrack);
   document.getElementById("btn-next").addEventListener("click", nextTrack);
+  document.getElementById("btn-download").addEventListener("click", downloadCurrent);
+  document.getElementById("mob-btn-play").addEventListener("click", togglePlay);
+  document.getElementById("mob-btn-prev").addEventListener("click", prevTrack);
+  document.getElementById("mob-btn-next").addEventListener("click", nextTrack);
+  document.getElementById("mob-btn-download").addEventListener("click", downloadCurrent);
+
   document.getElementById("btn-shuffle").addEventListener("click", () => {
     isShuffle = !isShuffle;
     document.getElementById("btn-shuffle").classList.toggle("text-accent-blue", isShuffle);
@@ -384,17 +379,11 @@
     document.getElementById("btn-repeat").classList.toggle("text-outline", !isRepeat);
   });
 
-  // Mobile controls
-  document.getElementById("mob-btn-play").addEventListener("click", togglePlay);
-  document.getElementById("mob-btn-prev").addEventListener("click", prevTrack);
-  document.getElementById("mob-btn-next").addEventListener("click", nextTrack);
-
   function togglePlay() {
     if (!audio.src || audio.src === window.location.href) { loadTrack(0, true); return; }
     if (isPlaying) { audio.pause(); isPlaying = false; }
     else { audio.play(); isPlaying = true; }
-    updatePlayIcons();
-    renderAll();
+    updatePlayIcons(); renderAll();
   }
   function prevTrack() {
     if (audio.currentTime > 3) { audio.currentTime = 0; return; }
@@ -405,7 +394,6 @@
     loadTrack(next, isPlaying);
   }
 
-  // Progress sync
   audio.addEventListener("timeupdate", () => {
     if (!audio.duration) return;
     const pct = (audio.currentTime / audio.duration) * 100;
@@ -418,17 +406,14 @@
     document.getElementById("mob-time-total").textContent = tot;
   });
 
-  // Scrub desktop
   document.getElementById("progress-rail").addEventListener("click", (e) => {
     const r = e.currentTarget.getBoundingClientRect();
     audio.currentTime = ((e.clientX - r.left) / r.width) * audio.duration;
   });
-  // Scrub mobile
   document.getElementById("mob-progress-rail").addEventListener("click", (e) => {
     const r = e.currentTarget.getBoundingClientRect();
     audio.currentTime = ((e.clientX - r.left) / r.width) * audio.duration;
   });
-  // Volume
   document.getElementById("volume-rail").addEventListener("click", (e) => {
     const r = e.currentTarget.getBoundingClientRect();
     const vol = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
@@ -436,13 +421,11 @@
     document.getElementById("volume-fill").style.width = (vol * 100) + "%";
   });
 
-  // Auto advance
   audio.addEventListener("ended", () => {
     if (isRepeat) { audio.play(); return; }
     nextTrack();
   });
 
-  // Search
   document.getElementById("search-input").addEventListener("input", (e) => {
     const q = e.target.value.toLowerCase();
     document.querySelectorAll(".track-item").forEach(el => {
@@ -451,7 +434,6 @@
     });
   });
 
-  // Mobile drawer
   document.getElementById("open-drawer").addEventListener("click", () => {
     document.getElementById("mobile-drawer").classList.add("open");
     document.getElementById("drawer-overlay").classList.add("open");
@@ -463,7 +445,6 @@
     document.getElementById("drawer-overlay").classList.remove("open");
   }
 
-  // Init
   loadTrack(0, false);
 </script>
 </body>
