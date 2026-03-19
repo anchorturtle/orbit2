@@ -109,7 +109,6 @@
   /* ── FLOATING PLAYER ── */
   #float-player{
     position:fixed;z-index:300;
-    /* desktop default: bottom-left next to sidebar */
     left:320px;bottom:20px;
     width:360px;
     min-width:280px;max-width:680px;
@@ -130,53 +129,25 @@
 
   /* ── MOBILE: full-viewport fixed layout ── */
   @media (max-width:767px){
-    /* body stays overflow:hidden — no page scroll */
     body{overflow:hidden;}
-
-    /* float-player pinned at bottom */
     #float-player{
       position:fixed!important;
-      left:0!important;
-      right:0!important;
-      bottom:0!important;
-      top:auto!important;
-      transform:none!important;
-      width:100%!important;
-      max-width:100%!important;
-      min-width:0!important;
+      left:0!important;right:0!important;bottom:0!important;top:auto!important;
+      transform:none!important;width:100%!important;max-width:100%!important;min-width:0!important;
       border-radius:16px 16px 0 0!important;
-      border-left:none!important;
-      border-right:none!important;
-      border-bottom:none!important;
+      border-left:none!important;border-right:none!important;border-bottom:none!important;
     }
-
-    /* mobile main: fixed flex column filling viewport below top bar */
     main.mobile-main{
-      display:flex!important;
-      flex-direction:column!important;
-      position:fixed!important;
-      top:56px!important; /* height of top bar */
-      left:0!important;
-      right:0!important;
-      bottom:var(--player-height, 140px)!important;
-      overflow:hidden!important;
+      display:flex!important;flex-direction:column!important;
+      position:fixed!important;top:56px!important;left:0!important;right:0!important;
+      bottom:var(--player-height, 140px)!important;overflow:hidden!important;
     }
-
-    /* planet section: fixed height, no scroll */
     .mobile-planet-section{
-      flex-shrink:0;
-      padding:16px 0 12px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
+      flex-shrink:0;padding:16px 0 12px;
+      display:flex;flex-direction:column;align-items:center;
     }
-
-    /* tracklist section: fills remaining space and scrolls */
     .mobile-tracklist-section{
-      flex:1;
-      overflow-y:auto;
-      -webkit-overflow-scrolling:touch;
-      padding:0 20px 16px;
+      flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 20px 16px;
     }
     .mobile-tracklist-section::-webkit-scrollbar{display:none;}
     .mobile-tracklist-section{-ms-overflow-style:none;scrollbar-width:none;}
@@ -190,9 +161,7 @@
       radial-gradient(circle 18px at 100% 0%,rgba(126,200,227,.3) 0%,transparent 70%),
       radial-gradient(circle 18px at 0% 100%,rgba(126,200,227,.3) 0%,transparent 70%),
       radial-gradient(circle 18px at 100% 100%,rgba(126,200,227,.3) 0%,transparent 70%);
-    opacity:.65;
-    transition:opacity .3s;
-    z-index:0;
+    opacity:.65;transition:opacity .3s;z-index:0;
   }
   #float-player:hover::before{opacity:1;}
   #float-player.is-positioned{bottom:auto;}
@@ -205,10 +174,7 @@
   }
   #fp-handle:active{cursor:grabbing;}
 
-  .fp-resize{
-    position:absolute;width:20px;height:20px;
-    z-index:10;opacity:0;
-  }
+  .fp-resize{position:absolute;width:20px;height:20px;z-index:10;opacity:0;}
   .fp-resize.nw{top:0;left:0;cursor:nw-resize;}
   .fp-resize.ne{top:0;right:0;cursor:ne-resize;}
   .fp-resize.sw{bottom:0;left:0;cursor:sw-resize;}
@@ -254,7 +220,6 @@
 <!-- ══ SIDEBAR ════════════════════════════════════════ -->
 <aside class="hidden md:flex h-full w-64 fixed left-0 top-0 z-40 flex-col border-r container-texture depth-near"
   style="background:rgba(6,4,18,.82);backdrop-filter:blur(24px);border-color:rgba(100,60,200,.14);padding:24px 20px;gap:16px">
-  <!-- centered title block -->
   <div style="text-align:center;margin-bottom:4px">
     <h1 class="text-2xl font-black tracking-tighter italic vhs-flicker phosphor" style="color:var(--jestr-purple);line-height:1">Orbit</h1>
     <p class="font-bold tracking-[0.3em] text-[8px] uppercase phosphor" style="color:rgba(0,200,150,.6);margin-top:2px">Cosmic Hi-Fi</p>
@@ -332,9 +297,7 @@
 </main>
 
 <!-- ══ MOBILE MAIN ═══════════════════════════════════════════ -->
-<!-- Fixed flex-column viewport: planet (fixed height) + tracklist (flex:1 scroll) -->
 <main class="md:hidden mobile-main">
-  <!-- Planet section: fixed height, no scroll -->
   <div class="mobile-planet-section relative">
     <div class="absolute w-56 h-56 rounded-full ring-far depth-far" style="border:1px solid rgba(45,91,255,.07)"></div>
     <div class="relative w-44 h-44 depth-mid">
@@ -350,7 +313,6 @@
       </div>
     </div>
   </div>
-  <!-- Tracklist section: scrollable middle region -->
   <div class="mobile-tracklist-section">
     <span class="tape-counter" style="display:block;margin-bottom:12px">All Tracks</span>
     <div style="display:flex;flex-direction:column;gap:4px" id="mobile-main-tracklist"></div>
@@ -456,12 +418,9 @@
   function updatePlayerHeightVar(){
     if(window.innerWidth>=768)return;
     const fp=document.getElementById("float-player");
-    if(fp){
-      document.documentElement.style.setProperty("--player-height", fp.offsetHeight+"px");
-    }
+    if(fp) document.documentElement.style.setProperty("--player-height",fp.offsetHeight+"px");
   }
   window.addEventListener("resize",updatePlayerHeightVar);
-  // Run after first paint
   requestAnimationFrame(()=>requestAnimationFrame(updatePlayerHeightVar));
 
   const TRACKS=[
@@ -492,7 +451,7 @@
     function isMobile(){return window.innerWidth<768;}
     function getRect(){return fp.getBoundingClientRect();}
     function pinPosition(){
-      if(isMobile())return; // don't pin on mobile — CSS handles centering
+      if(isMobile())return;
       if(!fp.classList.contains("is-positioned")){
         const r=getRect();
         fp.style.bottom="";fp.style.transform="";
@@ -550,9 +509,15 @@
   function updateChroma(id,text){const el=document.getElementById(id);if(!el)return;el.textContent=text;el.setAttribute("data-text",text);}
   function downloadCurrent(){const t=TRACKS[currentIndex];const a=document.createElement("a");a.href=t.file;a.download=t.file;a.click();}
 
+  /* ── DURATION HELPERS ──
+     Strict check: must be finite, positive, and under 5 hours.
+     This rejects Infinity (VBR pre-scan) and 0/NaN. */
+  function isGoodDuration(d){
+    return typeof d==="number" && isFinite(d) && d>0 && d<18000;
+  }
   function tryUpdateDuration(){
     const dur=audio.duration;
-    if(dur&&isFinite(dur)&&dur>0){
+    if(isGoodDuration(dur)){
       document.getElementById("time-total").textContent=fmt(dur);
       return true;
     }
@@ -560,26 +525,23 @@
   }
 
   /* ── VBR DURATION POLLING ──
-     After audio.load(), some VBR files only reveal duration after
-     significant buffering. Poll every 500ms for up to 30s. */
+     Polls every 500ms for up to 30s after audio.load().
+     On desktop, large VBR files (e.g. Wheels) return Infinity until
+     enough of the file has been buffered/scanned. The poll catches
+     the moment the browser finally resolves the real duration. */
   function startDurationPoll(){
-    if(durationPollTimer)clearInterval(durationPollTimer);
+    if(durationPollTimer){clearInterval(durationPollTimer);durationPollTimer=null;}
     const deadline=Date.now()+30000;
     durationPollTimer=setInterval(()=>{
       if(tryUpdateDuration()){
-        clearInterval(durationPollTimer);
-        durationPollTimer=null;
-        return;
+        clearInterval(durationPollTimer);durationPollTimer=null;return;
       }
-      if(Date.now()>=deadline){
-        clearInterval(durationPollTimer);
-        durationPollTimer=null;
-      }
+      if(Date.now()>=deadline){clearInterval(durationPollTimer);durationPollTimer=null;}
     },500);
   }
 
   function applySavedSeek(){
-    if(seekOnReady!==null&&audio.readyState>=1&&isFinite(audio.duration)&&audio.duration>0){
+    if(seekOnReady!==null&&audio.readyState>=1&&isGoodDuration(audio.duration)){
       audio.currentTime=seekOnReady*audio.duration;seekOnReady=null;
       tryUpdateDuration();
     }
@@ -595,12 +557,12 @@
   function seekToPct(pct){
     pct=Math.max(0,Math.min(1,pct));
     setProgress(pct*100);
-    if(audio.readyState>=1&&isFinite(audio.duration)&&audio.duration>0){
+    if(audio.readyState>=1&&isGoodDuration(audio.duration)){
       audio.currentTime=pct*audio.duration;seekOnReady=null;
     } else {seekOnReady=pct;}
   }
   function skip(sec){
-    if(audio.readyState>=1&&isFinite(audio.duration))
+    if(audio.readyState>=1&&isGoodDuration(audio.duration))
       audio.currentTime=Math.max(0,Math.min(audio.duration,(audio.currentTime||0)+sec));
   }
   function clientXToFraction(clientX,rail){
@@ -623,11 +585,9 @@
 
   function loadTrack(index,autoplay=false){
     currentIndex=index;seekOnReady=null;isSeeking=false;
-    // Clear any existing duration poll
     if(durationPollTimer){clearInterval(durationPollTimer);durationPollTimer=null;}
     const t=TRACKS[index];
     audio.src=t.file;audio.load();
-    // Start VBR duration polling immediately after load()
     startDurationPoll();
     updateChroma("focal-title",t.title);updateChroma("focal-title-mobile",t.title);
     ["focal-artist","focal-artist-mobile"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=t.artist;});
@@ -658,8 +618,14 @@
   audio.addEventListener("timeupdate",()=>{
     const dur=audio.duration;
     const cur=audio.currentTime;
-    // Always try to update duration (handles VBR/late-resolving duration)
-    if(dur&&isFinite(dur)&&dur>0){
+    // If playback has started but duration is still unresolved (Infinity/NaN),
+    // try once more — at this point the browser has buffered enough to know it.
+    if(cur>0 && !isGoodDuration(dur)){
+      if(tryUpdateDuration() && durationPollTimer){
+        clearInterval(durationPollTimer);durationPollTimer=null;
+      }
+    }
+    if(isGoodDuration(dur)){
       document.getElementById("time-total").textContent=fmt(dur);
       document.getElementById("time-current").textContent=fmt(cur);
       if(!isSeeking)setProgress((cur/dur)*100);
@@ -678,23 +644,12 @@
   function updateRepeatUI(){
     const btn=document.getElementById("btn-repeat");
     const icon=document.getElementById("repeat-icon");
-    if(repeatMode===0){
-      btn.style.color="var(--baby-blue)";
-      icon.textContent="repeat";
-      btn.title="Repeat: Off";
-    } else if(repeatMode===1){
-      btn.style.color="var(--jestr-red)";
-      icon.textContent="repeat";
-      btn.title="Repeat: All";
-    } else {
-      btn.style.color="var(--jestr-red)";
-      icon.textContent="repeat_one";
-      btn.title="Repeat: One";
-    }
+    if(repeatMode===0){btn.style.color="var(--baby-blue)";icon.textContent="repeat";btn.title="Repeat: Off";}
+    else if(repeatMode===1){btn.style.color="var(--jestr-red)";icon.textContent="repeat";btn.title="Repeat: All";}
+    else{btn.style.color="var(--jestr-red)";icon.textContent="repeat_one";btn.title="Repeat: One";}
   }
   function updateShuffleUI(){
-    const btn=document.getElementById("btn-shuffle");
-    btn.style.color=isShuffle?"var(--jestr-red)":"var(--baby-blue)";
+    document.getElementById("btn-shuffle").style.color=isShuffle?"var(--jestr-red)":"var(--baby-blue)";
   }
   function updatePlayIcons(){
     document.getElementById("play-icon").textContent=isPlaying?"pause":"play_arrow";
@@ -756,10 +711,7 @@
   document.getElementById("btn-back10").addEventListener("click",()=>skip(-10));
   document.getElementById("btn-fwd10").addEventListener("click",()=>skip(10));
   document.getElementById("btn-download").addEventListener("click",downloadCurrent);
-  document.getElementById("btn-shuffle").addEventListener("click",()=>{
-    isShuffle=!isShuffle;
-    updateShuffleUI();
-  });
+  document.getElementById("btn-shuffle").addEventListener("click",()=>{isShuffle=!isShuffle;updateShuffleUI();});
   document.getElementById("btn-repeat").addEventListener("click",()=>{repeatMode=(repeatMode+1)%3;updateRepeatUI();});
 
   document.getElementById("search-input").addEventListener("input",e=>{
