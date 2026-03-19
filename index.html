@@ -109,7 +109,7 @@
   /* ── FLOATING PLAYER ── */
   #float-player{
     position:fixed;z-index:300;
-    /* default: bottom-left, next to sidebar */
+    /* desktop default: bottom-left next to sidebar */
     left:320px;bottom:20px;
     width:360px;
     min-width:280px;max-width:680px;
@@ -127,6 +127,26 @@
     user-select:none;
     overflow:hidden;
   }
+
+  /* ── MOBILE: float-player fixed center-bottom ── */
+  @media (max-width:767px){
+    #float-player{
+      left:50%!important;
+      bottom:12px!important;
+      top:auto!important;
+      transform:translateX(-50%)!important;
+      width:calc(100vw - 32px)!important;
+      max-width:420px!important;
+      min-width:0!important;
+    }
+    #float-player.is-positioned{
+      bottom:12px!important;
+      top:auto!important;
+    }
+    body{overflow:auto;}
+    main.md\:hidden{overflow-y:auto;}
+  }
+
   #float-player::before{
     content:"";
     position:absolute;inset:0;border-radius:18px;pointer-events:none;
@@ -277,7 +297,7 @@
 </main>
 
 <!-- ══ MOBILE MAIN ═══════════════════════════════════════════ -->
-<main class="md:hidden flex flex-col h-screen pt-14 pb-36 overflow-y-auto no-scrollbar">
+<main class="md:hidden flex flex-col" style="min-height:100vh;padding-top:56px;padding-bottom:160px;overflow-y:auto;">
   <div class="flex flex-col items-center py-8 relative">
     <div class="absolute w-56 h-56 rounded-full ring-far depth-far" style="border:1px solid rgba(45,91,255,.07)"></div>
     <div class="relative w-44 h-44 depth-mid">
@@ -293,6 +313,7 @@
       </div>
     </div>
   </div>
+  <!-- Tracklist visible on landing -->
   <div style="padding:0 20px 16px">
     <span class="tape-counter" style="display:block;margin-bottom:12px">All Tracks</span>
     <div style="display:flex;flex-direction:column;gap:4px" id="mobile-main-tracklist"></div>
@@ -418,8 +439,10 @@
     const fp=document.getElementById("float-player");
     const handle=document.getElementById("fp-handle");
     let mode=null,startX,startY,startL,startT,startW,startH;
+    function isMobile(){return window.innerWidth<768;}
     function getRect(){return fp.getBoundingClientRect();}
     function pinPosition(){
+      if(isMobile())return; // don't pin on mobile — CSS handles centering
       if(!fp.classList.contains("is-positioned")){
         const r=getRect();
         fp.style.bottom="";fp.style.transform="";
@@ -430,6 +453,7 @@
     }
     function clamp(v,mn,mx){return Math.max(mn,Math.min(mx,v));}
     function onDown(e,m){
+      if(isMobile())return;
       pinPosition();
       const r=getRect();mode=m;
       const cx=e.touches?e.touches[0].clientX:e.clientX;
@@ -469,18 +493,29 @@
   })();
 
   /* ── HELPERS ── */
-  function fmt(s){if(!s||isNaN(s)||!isFinite(s))return"0:00";return`${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,"0")}`; }
+  function fmt(s){
+    if(s===null||s===undefined||isNaN(s)||!isFinite(s)||s<0)return"0:00";
+    return`${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,"0")}`;
+  }
   function updateChroma(id,text){const el=document.getElementById(id);if(!el)return;el.textContent=text;el.setAttribute("data-text",text);}
   function downloadCurrent(){const t=TRACKS[currentIndex];const a=document.createElement("a");a.href=t.file;a.download=t.file;a.click();}
+
+  function tryUpdateDuration(){
+    const dur=audio.duration;
+    if(dur&&isFinite(dur)&&dur>0){
+      document.getElementById("time-total").textContent=fmt(dur);
+    }
+  }
 
   function applySavedSeek(){
     if(seekOnReady!==null&&audio.readyState>=1&&isFinite(audio.duration)&&audio.duration>0){
       audio.currentTime=seekOnReady*audio.duration;seekOnReady=null;
+      tryUpdateDuration();
     }
   }
-  audio.addEventListener("loadedmetadata",applySavedSeek);
-  audio.addEventListener("canplay",applySavedSeek);
-    audio.addEventListener("durationchange",applySavedSeek);
+  audio.addEventListener("loadedmetadata",()=>{tryUpdateDuration();applySavedSeek();});
+  audio.addEventListener("canplay",()=>{tryUpdateDuration();applySavedSeek();});
+  audio.addEventListener("durationchange",()=>{tryUpdateDuration();applySavedSeek();});
 
   function setProgress(pct){
     document.getElementById("progress-fill").style.width=pct+"%";
@@ -546,10 +581,16 @@
   })();
 
   audio.addEventListener("timeupdate",()=>{
-    if(!audio.duration||!isFinite(audio.duration))return;
-    document.getElementById("time-current").textContent=fmt(audio.currentTime);
-    document.getElementById("time-total").textContent=fmt(audio.duration);
-    if(!isSeeking)setProgress((audio.currentTime/audio.duration)*100);
+    const dur=audio.duration;
+    const cur=audio.currentTime;
+    // Always try to update duration (handles VBR/late-resolving duration)
+    if(dur&&isFinite(dur)&&dur>0){
+      document.getElementById("time-total").textContent=fmt(dur);
+      document.getElementById("time-current").textContent=fmt(cur);
+      if(!isSeeking)setProgress((cur/dur)*100);
+    } else {
+      document.getElementById("time-current").textContent=fmt(cur);
+    }
   });
 
   audio.addEventListener("ended",()=>{
@@ -562,9 +603,26 @@
   function updateRepeatUI(){
     const btn=document.getElementById("btn-repeat");
     const icon=document.getElementById("repeat-icon");
-    if(repeatMode===0){btn.style.color="";icon.textContent="repeat";btn.title="Repeat: Off";}
-    else if(repeatMode===1){btn.style.color="#7EC8E3";icon.textContent="repeat";btn.title="Repeat: All";}
-    else{btn.style.color="var(--jestr-red)";icon.textContent="repeat_one";btn.title="Repeat: One";}
+    if(repeatMode===0){
+      // Off → baby blue
+      btn.style.color="var(--baby-blue)";
+      icon.textContent="repeat";
+      btn.title="Repeat: Off";
+    } else if(repeatMode===1){
+      // Repeat All → red
+      btn.style.color="var(--jestr-red)";
+      icon.textContent="repeat";
+      btn.title="Repeat: All";
+    } else {
+      // Repeat One → red
+      btn.style.color="var(--jestr-red)";
+      icon.textContent="repeat_one";
+      btn.title="Repeat: One";
+    }
+  }
+  function updateShuffleUI(){
+    const btn=document.getElementById("btn-shuffle");
+    btn.style.color=isShuffle?"var(--jestr-red)":"var(--baby-blue)";
   }
   function updatePlayIcons(){
     document.getElementById("play-icon").textContent=isPlaying?"pause":"play_arrow";
@@ -628,7 +686,7 @@
   document.getElementById("btn-download").addEventListener("click",downloadCurrent);
   document.getElementById("btn-shuffle").addEventListener("click",()=>{
     isShuffle=!isShuffle;
-    document.getElementById("btn-shuffle").style.color=isShuffle?"#fff":"";
+    updateShuffleUI();
   });
   document.getElementById("btn-repeat").addEventListener("click",()=>{repeatMode=(repeatMode+1)%3;updateRepeatUI();});
 
@@ -653,6 +711,7 @@
 
   setVolume(0.8);
   updateRepeatUI();
+  updateShuffleUI();
   loadTrack(0,false);
 </script>
 </body>
