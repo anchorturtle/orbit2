@@ -90,7 +90,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
   box-shadow:0 2px 4px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.06);
 }
 .win-close:hover{background:rgba(232,0,61,.45);color:#fff;box-shadow:0 3px 8px rgba(0,0,0,.5),0 0 12px rgba(232,0,61,.45);}
-.win-close:active{transform:scale(.9) translateY(1px);box-shadow:0 1px 2px rgba(0,0,0,.6),inset 0 3px 5px rgba(0,0,0,.5);border-top-color:rgba(0,0,0,.3);border-bottom-color:rgba(255,255,255,.06);}
+.win-close:active{transform:scale(.9) translateY(1px);box-shadow:0 1px 2px rgba(0,0,0,.6),inset 0 3px 5px rgba(0,0,0,.5);}
 .win-resize{position:absolute;width:20px;height:20px;z-index:10;opacity:0;}
 .win-resize.nw{top:0;left:0;cursor:nw-resize;}
 .win-resize.ne{top:0;right:0;cursor:ne-resize;}
@@ -99,9 +99,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
 .win-body{flex:1;overflow:hidden;position:relative;z-index:1;display:flex;flex-direction:column;}
 
 /* ============ ANALOG BUTTONS ============ */
-.ctrl-btn,
-.taskbar-btn,
-.m-tab{
+.ctrl-btn,.taskbar-btn,.m-tab{
   background:rgba(255,255,255,.04);
   border:1px solid rgba(255,255,255,.07);
   border-top-color:rgba(255,255,255,.12);
@@ -114,41 +112,19 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
   backdrop-filter:blur(8px);color:var(--baby-blue);
   box-shadow:0 2px 4px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.07);
 }
-.ctrl-btn:hover,.taskbar-btn:hover,.m-tab:hover{
-  background:rgba(126,200,227,.12);
-  box-shadow:0 3px 8px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.10);
-}
-.ctrl-btn:active,.taskbar-btn:active,.m-tab:active{
-  transform:scale(.95) translateY(1px);
-  background:rgba(0,0,0,.18);
-  border-top-color:rgba(0,0,0,.3);
-  border-left-color:rgba(0,0,0,.2);
-  border-bottom-color:rgba(255,255,255,.06);
-  box-shadow:0 1px 2px rgba(0,0,0,.5),inset 0 2px 4px rgba(0,0,0,.35);
-}
-.ctrl-btn.active-state,.taskbar-btn.win-open,.m-tab.active{
-  background:rgba(10,6,30,.70);
-  border-top-color:rgba(0,0,0,.45);
-  border-left-color:rgba(0,0,0,.35);
-  border-bottom-color:rgba(255,255,255,.08);
-  box-shadow:inset 0 2px 6px rgba(0,0,0,.55),inset 0 1px 2px rgba(0,0,0,.35);
-  transform:translateY(1px);
-  color:rgba(200,180,255,.96);
-}
+.ctrl-btn:hover,.taskbar-btn:hover,.m-tab:hover{background:rgba(126,200,227,.12);box-shadow:0 3px 8px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.10);}
+.ctrl-btn:active,.taskbar-btn:active,.m-tab:active{transform:scale(.95) translateY(1px);background:rgba(0,0,0,.18);border-top-color:rgba(0,0,0,.3);border-left-color:rgba(0,0,0,.2);border-bottom-color:rgba(255,255,255,.06);box-shadow:0 1px 2px rgba(0,0,0,.5),inset 0 2px 4px rgba(0,0,0,.35);}
+.ctrl-btn.active-state,.taskbar-btn.win-open,.m-tab.active{background:rgba(10,6,30,.70);border-top-color:rgba(0,0,0,.45);border-left-color:rgba(0,0,0,.35);border-bottom-color:rgba(255,255,255,.08);box-shadow:inset 0 2px 6px rgba(0,0,0,.55),inset 0 1px 2px rgba(0,0,0,.35);transform:translateY(1px);color:rgba(200,180,255,.96);}
 
-.play-btn{
-  background:linear-gradient(135deg,var(--jestr-purple),var(--jestr-blue));
-  box-shadow:0 0 22px rgba(123,47,255,.55),0 3px 8px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.22);
-  transition:box-shadow .15s,transform .08s;border:none;cursor:pointer;
-}
+.play-btn{background:linear-gradient(135deg,var(--jestr-purple),var(--jestr-blue));box-shadow:0 0 22px rgba(123,47,255,.55),0 3px 8px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.22);transition:box-shadow .15s,transform .08s;border:none;cursor:pointer;}
 .play-btn:hover{box-shadow:0 0 34px rgba(45,91,255,.75),0 3px 12px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.25);}
 .play-btn:active{transform:scale(.93) translateY(1px);box-shadow:0 0 14px rgba(123,47,255,.4),0 1px 3px rgba(0,0,0,.6),inset 0 3px 6px rgba(0,0,0,.35);}
 
 /* ============ SCRUBBERS ============ */
 .progress-wrap,.volume-wrap{position:relative;height:22px;display:flex;align-items:center;cursor:pointer;flex:1;user-select:none;-webkit-user-select:none;touch-action:none;}
 .progress-track-bg,.volume-track-bg{position:absolute;left:0;right:0;height:3px;border-radius:3px;background:rgba(255,255,255,.1);transition:height .12s;}
-.progress-fill-bar{position:absolute;left:0;top:50%;transform:translateY(-50%);height:3px;border-radius:3px;background:linear-gradient(90deg,var(--jestr-purple),var(--jestr-blue),var(--jestr-green));pointer-events:none;transition:height .12s;}
-.volume-fill-bar{position:absolute;left:0;top:50%;transform:translateY(-50%);height:3px;border-radius:3px;background:var(--jestr-green);pointer-events:none;transition:height .12s;}
+.progress-fill-bar{position:absolute;left:0;top:50%;transform:translateY(-50%);height:3px;border-radius:3px;background:linear-gradient(90deg,var(--jestr-purple),var(--jestr-blue),var(--jestr-green));pointer-events:none;}
+.volume-fill-bar{position:absolute;left:0;top:50%;transform:translateY(-50%);height:3px;border-radius:3px;background:var(--jestr-green);pointer-events:none;}
 .progress-thumb,.volume-thumb{position:absolute;top:50%;transform:translate(-50%,-50%);width:14px;height:14px;border-radius:50%;background:#fff;pointer-events:none;opacity:0;transition:opacity .15s,transform .1s;z-index:2;}
 .progress-thumb{box-shadow:0 0 0 3px rgba(123,47,255,.5),0 2px 8px rgba(0,0,0,.6);}
 .volume-thumb{box-shadow:0 0 0 3px rgba(0,200,150,.5),0 2px 8px rgba(0,0,0,.6);}
@@ -159,7 +135,15 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
 .volume-wrap:hover .volume-track-bg,.volume-wrap:hover .volume-fill-bar,
 .volume-wrap.dragging .volume-track-bg,.volume-wrap.dragging .volume-fill-bar{height:5px;}
 .progress-wrap.dragging .progress-thumb,.volume-wrap.dragging .volume-thumb{transform:translate(-50%,-50%) scale(1.2);}
-#vol-icon{cursor:pointer;transition:color .2s,text-shadow .2s;user-select:none;-webkit-user-select:none;}
+
+/* vol icon — large tap target on mobile */
+#vol-icon-wrap{
+  display:flex;align-items:center;justify-content:center;
+  width:36px;height:36px;flex-shrink:0;cursor:pointer;
+  border-radius:8px;margin:-7px -4px -7px -4px;
+  -webkit-tap-highlight-color:transparent;
+}
+#vol-icon{font-size:14px;color:rgba(0,200,150,.55);transition:color .2s,text-shadow .2s;pointer-events:none;}
 #vol-icon.muted{color:var(--jestr-red)!important;text-shadow:0 0 8px rgba(232,0,61,.5);}
 
 /* ============ SEARCH ============ */
@@ -169,7 +153,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
 .search-wrap input{background:transparent!important;border:none!important;outline:none!important;color:#e9e1de;font-size:11px;font-family:inherit;width:100%;padding:0;}
 .search-wrap input::placeholder{color:rgba(110,104,117,.45);}
 
-/* ============ TRACK ITEMS + DROP INDICATOR ============ */
+/* ============ TRACK ITEMS ============ */
 .track-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:10px;cursor:pointer;border:1px solid transparent;transition:background .15s,border-color .15s,transform .12s;}
 .track-item:hover{background:rgba(45,91,255,.07);}
 .track-item.active{background:rgba(45,91,255,.12)!important;border-color:rgba(123,47,255,.3)!important;}
@@ -179,13 +163,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
 .drag-handle{cursor:grab;color:rgba(110,104,117,.3);display:flex;align-items:center;flex-shrink:0;transition:color .15s;padding:2px;touch-action:none;}
 .drag-handle:hover{color:rgba(0,200,150,.6);}
 .drag-handle:active{cursor:grabbing;}
-.drop-indicator{
-  height:3px;border-radius:999px;
-  background:linear-gradient(90deg,transparent 0%,var(--jestr-purple) 20%,var(--jestr-blue) 50%,var(--jestr-green) 80%,transparent 100%);
-  margin:2px 10px;
-  box-shadow:0 0 8px rgba(123,47,255,.8),0 0 16px rgba(0,200,150,.4);
-  pointer-events:none;
-}
+.drop-indicator{height:3px;border-radius:999px;background:linear-gradient(90deg,transparent 0%,var(--jestr-purple) 20%,var(--jestr-blue) 50%,var(--jestr-green) 80%,transparent 100%);margin:2px 10px;box-shadow:0 0 8px rgba(123,47,255,.8),0 0 16px rgba(0,200,150,.4);pointer-events:none;}
 
 /* ============ GALLERY ============ */
 .gallery-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:2px;}
@@ -193,22 +171,14 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
 .gallery-item:hover{transform:scale(1.03);box-shadow:0 0 18px rgba(123,47,255,.4);border-color:rgba(123,47,255,.5);}
 .gallery-item img{width:100%;height:100%;object-fit:cover;display:block;}
 
-/* ============ LIGHTBOX ============ */
-#gallery-lightbox{display:none;position:fixed;inset:0;z-index:600;background:rgba(3,2,10,.93);backdrop-filter:blur(22px);align-items:center;justify-content:center;}
-#gallery-lightbox.open{display:flex;}
-#lb-img{max-width:92vw;max-height:86vh;border-radius:14px;box-shadow:0 0 80px rgba(123,47,255,.45),0 0 20px rgba(0,0,0,.8);}
-#lb-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#e9e1de;transition:background .15s;}
-#lb-close:hover{background:rgba(232,0,61,.2);border-color:rgba(232,0,61,.4);color:var(--jestr-red);}
+/* ============ IMAGE VIEWER WINDOW ============ */
+#image-win{display:none;}
+#image-win .win-body{align-items:center;justify-content:center;background:rgba(3,2,10,.5);padding:10px;}
+#image-win-img{max-width:100%;max-height:100%;border-radius:8px;object-fit:contain;display:block;}
 
 /* ============ DESKTOP DOCK ============ */
-#dock-win{
-  position:fixed;bottom:10px;left:50%;transform:translateX(-50%);
-  width:min(500px,94vw);z-index:400;border-radius:14px;
-}
-#dock-win .win-body{
-  flex-direction:row;align-items:center;justify-content:center;
-  gap:8px;padding:6px 14px;
-}
+#dock-win{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);width:min(500px,94vw);z-index:400;border-radius:14px;}
+#dock-win .win-body{flex-direction:row;align-items:center;justify-content:center;gap:8px;padding:6px 14px;}
 .dock-logo-wrap{display:flex;flex-direction:column;align-items:center;margin-right:6px;flex-shrink:0;}
 .dock-logo-main{font-size:15px;font-weight:900;font-style:italic;color:var(--jestr-purple);letter-spacing:-.03em;}
 .dock-logo-sub{font-size:7px;font-weight:700;letter-spacing:.25em;color:rgba(0,200,150,.5);text-transform:uppercase;}
@@ -221,42 +191,27 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
 
 /* ============ MOBILE NAV DOCK ============ */
 #mobile-dock{
-  display:none;
-  position:fixed;bottom:0;left:0;right:0;z-index:500;
-  background:rgba(6,4,18,.92);
-  backdrop-filter:blur(28px);
-  -webkit-backdrop-filter:blur(28px);
+  display:none;position:fixed;bottom:0;left:0;right:0;z-index:500;
+  background:rgba(6,4,18,.92);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);
   border-top:1px solid rgba(123,47,255,.22);
   padding:8px 16px calc(8px + env(safe-area-inset-bottom));
   align-items:center;justify-content:space-around;
 }
-/* Mobile buttons — same analog aesthetic as player ctrl-btns */
 .mob-btn{
   display:flex;flex-direction:column;align-items:center;gap:4px;
   padding:8px 18px;border-radius:10px;cursor:pointer;flex:1;max-width:100px;
   background:rgba(255,255,255,.04);
   border:1px solid rgba(255,255,255,.07);
-  border-top-color:rgba(255,255,255,.13);
-  border-left-color:rgba(255,255,255,.10);
-  border-bottom-color:rgba(0,0,0,.38);
-  border-right-color:rgba(0,0,0,.22);
-  color:var(--baby-blue);
-  font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  border-top-color:rgba(255,255,255,.13);border-left-color:rgba(255,255,255,.10);
+  border-bottom-color:rgba(0,0,0,.38);border-right-color:rgba(0,0,0,.22);
+  color:var(--baby-blue);font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
   transition:background .12s,box-shadow .12s,transform .07s,color .12s,border-color .12s;
   box-shadow:0 2px 5px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08);
+  -webkit-tap-highlight-color:transparent;
 }
 .mob-btn .material-symbols-outlined{font-size:22px;}
-.mob-btn:hover{background:rgba(126,200,227,.1);box-shadow:0 3px 8px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.11);}
-.mob-btn:active{transform:scale(.94) translateY(1px);background:rgba(0,0,0,.2);box-shadow:0 1px 2px rgba(0,0,0,.5),inset 0 2px 4px rgba(0,0,0,.35);border-top-color:rgba(0,0,0,.32);border-bottom-color:rgba(255,255,255,.07);}
-.mob-btn.active{
-  background:rgba(10,6,30,.78);
-  border-top-color:rgba(0,0,0,.48);
-  border-left-color:rgba(0,0,0,.36);
-  border-bottom-color:rgba(255,255,255,.08);
-  box-shadow:inset 0 2px 6px rgba(0,0,0,.55),inset 0 1px 2px rgba(0,0,0,.35);
-  transform:translateY(1px);
-  color:var(--jestr-green);
-}
+.mob-btn:active{transform:scale(.94) translateY(1px);background:rgba(0,0,0,.2);box-shadow:0 1px 2px rgba(0,0,0,.5),inset 0 2px 4px rgba(0,0,0,.35);}
+.mob-btn.active{background:rgba(10,6,30,.78);border-top-color:rgba(0,0,0,.48);border-left-color:rgba(0,0,0,.36);border-bottom-color:rgba(255,255,255,.08);box-shadow:inset 0 2px 6px rgba(0,0,0,.55),inset 0 1px 2px rgba(0,0,0,.35);transform:translateY(1px);color:var(--jestr-green);}
 .mob-btn.active .material-symbols-outlined{text-shadow:0 0 8px rgba(0,200,150,.5);}
 .mob-dot{width:4px;height:4px;border-radius:50%;background:var(--jestr-green);opacity:0;box-shadow:0 0 6px rgba(0,200,150,.8);transition:opacity .2s;}
 .mob-btn.active .mob-dot{opacity:1;}
@@ -266,38 +221,32 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
   #dock-win{display:none;}
   #mobile-dock{display:flex;}
   #planet-bg{display:none;}
-
   #player-win{
-    position:fixed!important;
-    left:0!important;right:0!important;
-    bottom:var(--mob-dock-h)!important;
-    top:auto!important;
+    position:fixed!important;left:0!important;right:0!important;
+    bottom:var(--mob-dock-h)!important;top:auto!important;
     width:100%!important;max-width:100%!important;min-width:0!important;
     border-radius:16px 16px 0 0!important;
     border-left:none!important;border-right:none!important;border-bottom:none!important;
   }
   #tracklist-win{
-    position:fixed!important;
-    left:0!important;right:0!important;
-    top:0!important;
+    position:fixed!important;left:0!important;right:0!important;top:0!important;
     bottom:calc(var(--mob-dock-h) + var(--mob-player-h))!important;
     width:100%!important;max-width:100%!important;
-    border-radius:0!important;
-    border-left:none!important;border-right:none!important;border-top:none!important;
+    border-radius:0!important;border-left:none!important;border-right:none!important;border-top:none!important;
   }
   #gallery-win{
-    position:fixed!important;
-    left:0!important;right:0!important;
-    top:0!important;
+    position:fixed!important;left:0!important;right:0!important;top:0!important;
     bottom:calc(var(--mob-dock-h) + var(--mob-player-h))!important;
     width:100%!important;max-width:100%!important;
-    border-radius:0!important;
-    border-left:none!important;border-right:none!important;border-top:none!important;
+    border-radius:0!important;border-left:none!important;border-right:none!important;border-top:none!important;
+  }
+  #image-win{
+    position:fixed!important;left:5vw!important;top:5vh!important;
+    width:90vw!important;height:80vh!important;
+    border-radius:16px!important;
   }
 }
-@media(min-width:768px){
-  #planet-bg{bottom:80px;}
-}
+@media(min-width:768px){#planet-bg{bottom:80px;}}
 </style>
 <script id="tc">tailwind.config={darkMode:"class",theme:{extend:{fontFamily:{headline:["Plus Jakarta Sans"],body:["Plus Jakarta Sans"]}}}}</script>
 </head>
@@ -326,8 +275,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
   </div>
 </div>
 
-<!-- TRACKLIST WINDOW — starts hidden; JS shows it after layout -->
-<div id="tracklist-win" class="win" style="display:none;left:20px;top:20px;width:280px;height:520px;z-index:320">
+<!-- TRACKLIST WINDOW -->
+<div id="tracklist-win" class="win" style="display:none;z-index:320">
   <div class="win-resize nw" data-dir="nw"></div><div class="win-resize ne" data-dir="ne"></div>
   <div class="win-resize sw" data-dir="sw"></div><div class="win-resize se" data-dir="se"></div>
   <div class="win-bar" id="tracklist-bar">
@@ -352,7 +301,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
 </div>
 
 <!-- GALLERY WINDOW -->
-<div id="gallery-win" class="win" style="display:none;left:316px;top:20px;width:340px;height:480px;z-index:310">
+<div id="gallery-win" class="win" style="display:none;z-index:310">
   <div class="win-resize nw" data-dir="nw"></div><div class="win-resize ne" data-dir="ne"></div>
   <div class="win-resize sw" data-dir="sw"></div><div class="win-resize se" data-dir="se"></div>
   <div class="win-bar" id="gallery-bar">
@@ -364,13 +313,13 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
       <button class="win-close" id="close-gallery" title="Close"><span class="material-symbols-outlined" style="font-size:11px">close</span></button>
     </div>
   </div>
-  <div class="win-body" style="overflow-y:auto;padding:10px" id="gallery-scroll">
+  <div class="win-body" style="overflow-y:auto;padding:10px">
     <div class="gallery-grid" id="gw-grid"></div>
   </div>
 </div>
 
-<!-- PLAYER WINDOW — starts hidden; JS shows after layout -->
-<div id="player-win" class="win" style="display:none;left:20px;top:560px;width:380px;z-index:330">
+<!-- PLAYER WINDOW -->
+<div id="player-win" class="win" style="display:none;z-index:330">
   <div class="win-resize nw" data-dir="nw"></div><div class="win-resize ne" data-dir="ne"></div>
   <div class="win-resize sw" data-dir="sw"></div><div class="win-resize se" data-dir="se"></div>
   <div class="win-bar" id="player-bar">
@@ -391,7 +340,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
         <p id="fp-title" style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:#e9e1de;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0">No Track</p>
         <p id="fp-artist" class="phosphor" style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--jestr-green);margin:0">&mdash;</p>
       </div>
-      <button id="btn-download" class="ctrl-btn" style="padding:5px;flex-shrink:0" title="Download current track">
+      <button id="btn-download" class="ctrl-btn" style="padding:5px;flex-shrink:0" title="Download">
         <span class="material-symbols-outlined" style="font-size:15px">download</span>
       </button>
     </div>
@@ -416,7 +365,9 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
       <span id="time-total" class="tape-counter" style="width:30px;flex-shrink:0;text-align:right;font-size:8px">0:00</span>
     </div>
     <div style="display:flex;align-items:center;gap:7px;background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:5px 10px">
-      <span id="vol-icon" class="material-symbols-outlined" title="Mute/Unmute" style="font-size:14px;color:rgba(0,200,150,.55);flex-shrink:0;cursor:pointer">volume_up</span>
+      <div id="vol-icon-wrap" title="Mute/Unmute">
+        <span id="vol-icon" class="material-symbols-outlined">volume_up</span>
+      </div>
       <div class="volume-wrap" id="volume-rail">
         <div class="volume-track-bg"></div>
         <div class="volume-fill-bar" id="volume-fill" style="width:80%"></div>
@@ -427,10 +378,22 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
   </div>
 </div>
 
-<!-- LIGHTBOX -->
-<div id="gallery-lightbox">
-  <img id="lb-img" src="" alt=""/>
-  <button id="lb-close"><span class="material-symbols-outlined" style="font-size:20px">close</span></button>
+<!-- IMAGE VIEWER WINDOW -->
+<div id="image-win" class="win" style="z-index:500">
+  <div class="win-resize nw" data-dir="nw"></div><div class="win-resize ne" data-dir="ne"></div>
+  <div class="win-resize sw" data-dir="sw"></div><div class="win-resize se" data-dir="se"></div>
+  <div class="win-bar" id="image-win-bar">
+    <div class="win-bar-left">
+      <span class="material-symbols-outlined" style="font-size:12px;color:rgba(150,100,255,.5)">drag_indicator</span>
+      <span class="win-title" id="image-win-title">Image</span>
+    </div>
+    <div class="win-bar-right">
+      <button class="win-close" id="close-image-win" title="Close"><span class="material-symbols-outlined" style="font-size:11px">close</span></button>
+    </div>
+  </div>
+  <div class="win-body" id="image-win-body" style="align-items:center;justify-content:center;background:rgba(3,2,10,.5);padding:10px;overflow:hidden">
+    <img id="image-win-img" src="" alt="" style="max-width:100%;max-height:100%;border-radius:8px;object-fit:contain;display:block"/>
+  </div>
 </div>
 
 <!-- DESKTOP DOCK -->
@@ -490,25 +453,18 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#06040f;color:#e9e1de
 
 function isMob(){return window.innerWidth<768;}
 
-/* ── Z-INDEX MANAGER ──
-   Player is preferred foreground; always goes to top.
-   Other windows raise on open/click but never above player unless player is hidden. */
+/* ── Z-INDEX MANAGER ── */
 let _zBase=300;
 function bringToFront(winId){
   _zBase++;
   const win=document.getElementById(winId);
   if(!win)return;
-  // Player preferred: give it +1 extra so it sits on top of tracklist when both open
   if(winId==="player-win"){
     win.style.zIndex=_zBase+1;
   } else {
     win.style.zIndex=_zBase;
-    // If player is visible, re-raise it above whatever just opened
     const pl=document.getElementById("player-win");
-    if(pl&&pl.style.display==="flex"){
-      _zBase++;
-      pl.style.zIndex=_zBase;
-    }
+    if(pl&&pl.style.display==="flex"){_zBase++;pl.style.zIndex=_zBase;}
   }
 }
 
@@ -533,50 +489,65 @@ function setMobActive(btnId,on){
 function mobToggle(winId,btnId){
   const win=document.getElementById(winId);
   const visible=win.style.display==="flex";
-  if(visible){
-    win.style.display="none";
-    setMobActive(btnId,false);
-  } else {
-    win.style.display="flex";
-    setMobActive(btnId,true);
-    bringToFront(winId);
-    if(winId==="gallery-win")renderGallery();
-  }
+  if(visible){win.style.display="none";setMobActive(btnId,false);}
+  else{win.style.display="flex";setMobActive(btnId,true);bringToFront(winId);if(winId==="gallery-win")renderGallery();}
   updateMobPlayerHeight();
 }
 
-/* ── DESKTOP CENTERED LAYOUT ── */
+/* ── DESKTOP LAYOUT: even spread around planet ──
+   Planet center = viewport center (above dock).
+   Tracklist: left column, vertically centered.
+   Player: bottom center, below planet.
+   Gallery: right column, vertically centered.
+   All three have comfortable gap from planet (~260px radius + padding).
+*/
 function applyDesktopLayout(){
   if(isMob())return;
   const vw=window.innerWidth,vh=window.innerHeight;
   const dock=document.getElementById("dock-win");
-  const dockH=(dock?dock.offsetHeight:0)||70;
-  const usableH=vh-dockH-10;
-  const centerX=vw/2,centerY=usableH/2;
-  const GAP=20;
+  const dockH=dock?dock.offsetHeight:70;
+  // usable area above dock
+  const usableH=vh-dockH-20;
+  // planet center in usable area
+  const cx=vw/2, cy=usableH/2;
+  const PLANET_R=200; // visual clear radius around planet center
+  const PAD=16;       // screen edge padding
 
   const tl=document.getElementById("tracklist-win");
   const g=document.getElementById("gallery-win");
   const pl=document.getElementById("player-win");
 
-  const tlW=Math.min(290,vw*0.23),tlH=Math.min(540,usableH-40);
-  const gW=Math.min(340,vw*0.26),gH=Math.min(480,usableH-40);
-  const plW=Math.min(380,vw*0.30),plH=210;
+  // Window sizes — scale gracefully on smaller screens
+  const tlW=Math.min(270,Math.max(220,(cx-PLANET_R-PAD)*0.9));
+  const tlH=Math.min(520,usableH-2*PAD);
+  const gW=Math.min(300,Math.max(220,(vw-cx-PLANET_R-PAD)*0.9));
+  const gH=Math.min(460,usableH-2*PAD);
+  const plW=Math.min(380,Math.max(300,vw*0.28));
+  const plH=210;
 
-  tl.style.width=tlW+"px";tl.style.height=tlH+"px";
-  g.style.width=gW+"px";g.style.height=gH+"px";
-  pl.style.width=plW+"px";pl.style.height=plH+"px";
+  tl.style.width=tlW+"px"; tl.style.height=tlH+"px";
+  g.style.width=gW+"px";   g.style.height=gH+"px";
+  pl.style.width=plW+"px"; pl.style.height=plH+"px";
 
-  tl.style.left=(centerX-tlW-GAP)+"px";
-  tl.style.top=Math.max(16,centerY-tlH/2)+"px";
+  // Tracklist: flush right edge to just left of planet clear zone
+  const tlLeft=Math.max(PAD, cx-PLANET_R-tlW-12);
+  tl.style.left=tlLeft+"px";
+  tl.style.top=Math.max(PAD, cy-tlH/2)+"px";
 
-  g.style.left=(centerX+GAP)+"px";
-  g.style.top=Math.max(16,centerY-gH/2)+"px";
+  // Gallery: flush left edge to just right of planet clear zone
+  const gLeft=Math.min(vw-gW-PAD, cx+PLANET_R+12);
+  g.style.left=gLeft+"px";
+  g.style.top=Math.max(PAD, cy-gH/2)+"px";
 
-  pl.style.left=(centerX-plW/2)+"px";
-  pl.style.top=Math.min(usableH-plH-16,centerY+160)+"px";
+  // Player: horizontally centered, positioned below planet center
+  const plLeft=Math.max(PAD, cx-plW/2);
+  pl.style.left=plLeft+"px";
+  const plTop=Math.min(usableH-plH-PAD, cy+PLANET_R-20);
+  pl.style.top=Math.max(PAD, plTop)+"px";
 
+  // Clear bottom/right so fixed positioning works cleanly
   tl.style.bottom=g.style.bottom=pl.style.bottom="";
+  tl.style.right=g.style.right=pl.style.right="";
 }
 
 /* ── GALLERY ── */
@@ -589,12 +560,31 @@ function renderGallery(){
   const grid=document.getElementById("gw-grid");if(!grid)return;
   grid.innerHTML=GALLERY.map((g,i)=>`<div class="gallery-item" data-gi="${i}"><img src="${g.src}" alt="${g.label}" loading="lazy"/></div>`).join("");
   grid.querySelectorAll(".gallery-item").forEach(el=>{
-    el.addEventListener("click",()=>{
-      document.getElementById("lb-img").src=GALLERY[+el.dataset.gi].src;
-      document.getElementById("gallery-lightbox").classList.add("open");
-    });
+    el.addEventListener("click",()=>openImageWin(+el.dataset.gi));
+    el.addEventListener("touchend",e=>{e.preventDefault();openImageWin(+el.dataset.gi);},{passive:false});
   });
 }
+
+/* ── IMAGE VIEWER WINDOW ── */
+function openImageWin(idx){
+  const item=GALLERY[idx];
+  const win=document.getElementById("image-win");
+  document.getElementById("image-win-img").src=item.src;
+  document.getElementById("image-win-title").textContent=item.label;
+  if(!isMob()){
+    // Center it on screen at a good size
+    const vw=window.innerWidth,vh=window.innerHeight;
+    const w=Math.min(560,vw-80), h=Math.min(520,vh-120);
+    win.style.width=w+"px"; win.style.height=h+"px";
+    win.style.left=((vw-w)/2)+"px"; win.style.top=((vh-h)/2)+"px";
+    win.style.bottom=""; win.style.right="";
+  }
+  win.style.display="flex";
+  bringToFront("image-win");
+}
+document.getElementById("close-image-win").addEventListener("click",()=>{
+  document.getElementById("image-win").style.display="none";
+});
 
 /* ── WINDOW DRAGGABLE + RESIZE ── */
 function makeWindowDraggable(winId,barId){
@@ -619,14 +609,14 @@ function makeWindowDraggable(winId,barId){
   function onMove(e){
     if(!mode)return;
     const cx=e.touches?e.touches[0].clientX:e.clientX,cy=e.touches?e.touches[0].clientY:e.clientY;
-    const dx=cx-sx,dy=cy-sy,mw=260,mh=120,vw=window.innerWidth,vh=window.innerHeight;
+    const dx=cx-sx,dy=cy-sy,mw=240,mh=120,vw=window.innerWidth,vh=window.innerHeight;
     if(mode==="drag"){win.style.left=clamp(sl+dx,0,vw-sw)+"px";win.style.top=clamp(st+dy,0,vh-sh)+"px";}
     else{
       let l=sl,t=st,w=sw,h=sh;
-      if(mode==="se"){w=clamp(sw+dx,mw,900);h=clamp(sh+dy,mh,800);}
-      if(mode==="sw"){const nw=clamp(sw-dx,mw,900);l=sl+sw-nw;w=nw;h=clamp(sh+dy,mh,800);}
-      if(mode==="ne"){w=clamp(sw+dx,mw,900);const nh=clamp(sh-dy,mh,800);t=st+sh-nh;h=nh;}
-      if(mode==="nw"){const nw=clamp(sw-dx,mw,900);l=sl+sw-nw;w=nw;const nh=clamp(sh-dy,mh,800);t=st+sh-nh;h=nh;}
+      if(mode==="se"){w=clamp(sw+dx,mw,1200);h=clamp(sh+dy,mh,900);}
+      if(mode==="sw"){const nw=clamp(sw-dx,mw,1200);l=sl+sw-nw;w=nw;h=clamp(sh+dy,mh,900);}
+      if(mode==="ne"){w=clamp(sw+dx,mw,1200);const nh=clamp(sh-dy,mh,900);t=st+sh-nh;h=nh;}
+      if(mode==="nw"){const nw=clamp(sw-dx,mw,1200);l=sl+sw-nw;w=nw;const nh=clamp(sh-dy,mh,900);t=st+sh-nh;h=nh;}
       win.style.left=l+"px";win.style.top=t+"px";win.style.width=w+"px";win.style.height=h+"px";
     }
   }
@@ -637,7 +627,6 @@ function makeWindowDraggable(winId,barId){
     el.addEventListener("mousedown",e=>{onDown(e,el.dataset.dir);e.stopPropagation();});
     el.addEventListener("touchstart",e=>{onDown(e,el.dataset.dir);e.stopPropagation();},{passive:false});
   });
-  // click anywhere on window body raises it to front
   win.addEventListener("mousedown",()=>bringToFront(winId),{capture:true});
   win.addEventListener("touchstart",()=>bringToFront(winId),{capture:true,passive:true});
   window.addEventListener("mousemove",onMove);
@@ -646,18 +635,12 @@ function makeWindowDraggable(winId,barId){
   window.addEventListener("touchend",onUp);
 }
 
-/* ── TOGGLE / CLOSE WINDOWS ── */
+/* ── TOGGLE / CLOSE ── */
 function toggleWin(winId,btnId){
   const win=document.getElementById(winId),btn=document.getElementById(btnId);
   if(!win||!btn)return;
-  const visible=win.style.display==="flex";
-  if(!visible){
-    win.style.display="flex";btn.classList.add("win-open");
-    bringToFront(winId);
-    if(winId==="gallery-win")renderGallery();
-  } else {
-    win.style.display="none";btn.classList.remove("win-open");
-  }
+  if(win.style.display==="flex"){win.style.display="none";btn.classList.remove("win-open");}
+  else{win.style.display="flex";btn.classList.add("win-open");bringToFront(winId);if(winId==="gallery-win")renderGallery();}
 }
 function closeWin(winId,dockBtnId,mobBtnId){
   const win=document.getElementById(winId);
@@ -667,7 +650,6 @@ function closeWin(winId,dockBtnId,mobBtnId){
   if(isMob())updateMobPlayerHeight();
 }
 
-// Wire up close buttons
 document.getElementById("close-tracklist").addEventListener("click",()=>closeWin("tracklist-win","btn-tracklist","btn-mob-tracks"));
 document.getElementById("close-gallery").addEventListener("click",()=>closeWin("gallery-win","btn-gallery","btn-mob-gallery"));
 document.getElementById("close-player").addEventListener("click",()=>closeWin("player-win","btn-player","btn-mob-player"));
@@ -675,9 +657,7 @@ document.getElementById("close-player").addEventListener("click",()=>closeWin("p
 makeWindowDraggable("tracklist-win","tracklist-bar");
 makeWindowDraggable("gallery-win","gallery-bar");
 makeWindowDraggable("player-win","player-bar");
-
-document.getElementById("lb-close").addEventListener("click",()=>document.getElementById("gallery-lightbox").classList.remove("open"));
-document.getElementById("gallery-lightbox").addEventListener("click",e=>{if(e.target.id==="gallery-lightbox")document.getElementById("gallery-lightbox").classList.remove("open");});
+makeWindowDraggable("image-win","image-win-bar");
 
 /* ── TRACKS ── */
 let TRACKS=[
@@ -746,28 +726,20 @@ function updateVolUI(pct,muted){
 }
 function setVolume(pct){
   pct=Math.max(0,Math.min(1,pct));
-  isMuted=false;
-  premuteVolume=pct;
-  audio.volume=pct;
+  isMuted=false;premuteVolume=pct;audio.volume=pct;
   updateVolUI(pct,false);
 }
 function toggleMute(){
   isMuted=!isMuted;
-  if(isMuted){
-    if(audio.volume>0)premuteVolume=audio.volume;
-    audio.volume=0;
-    updateVolUI(0,true);
-  } else {
-    const v=premuteVolume>0?premuteVolume:0.8;
-    audio.volume=v;
-    updateVolUI(v,false);
-  }
+  if(isMuted){if(audio.volume>0)premuteVolume=audio.volume;audio.volume=0;updateVolUI(0,true);}
+  else{const v=premuteVolume>0?premuteVolume:0.8;audio.volume=v;updateVolUI(v,false);}
 }
 
-// vol-icon: tap/click = mute toggle; vol scrubber sets volume
-const volIconEl=document.getElementById("vol-icon");
-volIconEl.addEventListener("click",e=>{e.stopPropagation();toggleMute();});
-volIconEl.addEventListener("touchend",e=>{e.preventDefault();e.stopPropagation();toggleMute();},{passive:false});
+// Volume icon wrap — handles both mouse and touch without interference
+const volWrap=document.getElementById("vol-icon-wrap");
+volWrap.addEventListener("click",e=>{e.stopPropagation();e.preventDefault();toggleMute();});
+volWrap.addEventListener("touchend",e=>{e.stopPropagation();e.preventDefault();toggleMute();},{passive:false});
+volWrap.addEventListener("touchstart",e=>{e.stopPropagation();},{passive:true});
 
 makeScrubber("volume-rail",pct=>setVolume(pct));
 
@@ -809,21 +781,14 @@ function updateShuffleUI(){
 }
 function updatePlayIcons(){document.getElementById("play-icon").textContent=isPlaying?"pause":"play_arrow";}
 
-/* ── DRAG-TO-REORDER (desktop HTML5 + mobile touch) ── */
-let dragSrcIdx=null;let dropIndicator=null;
-function ensureDropIndicator(){
-  if(!dropIndicator){dropIndicator=document.createElement("div");dropIndicator.className="drop-indicator";}
-  return dropIndicator;
-}
-// Touch drag state
+/* ── DRAG-TO-REORDER ── */
+let dragSrcIdx=null,dropIndicator=null;
+function ensureDropIndicator(){if(!dropIndicator){dropIndicator=document.createElement("div");dropIndicator.className="drop-indicator";}return dropIndicator;}
 let touchDragIdx=null,touchDragEl=null,touchClone=null;
 function removeTouchClone(){if(touchClone){touchClone.remove();touchClone=null;}}
-function getTrackIdxAtY(y){
+function getTrackElAtY(y){
   const items=[...document.querySelectorAll("#sidebar-tracklist .track-item")];
-  for(const el of items){
-    const r=el.getBoundingClientRect();
-    if(y>=r.top&&y<r.bottom)return{el,before:(y-r.top)<r.height/2};
-  }
+  for(const el of items){const r=el.getBoundingClientRect();if(y>=r.top&&y<r.bottom)return{el,before:(y-r.top)<r.height/2};}
   return null;
 }
 
@@ -845,95 +810,59 @@ function bindTrackListEvents(){
   const list=document.getElementById("sidebar-tracklist");
   list.querySelectorAll(".track-item").forEach(el=>{
     const idx=parseInt(el.dataset.index);
-    // Click to play
     el.addEventListener("click",e=>{if(e.target.closest(".drag-handle"))return;loadTrack(idx,true);});
-
-    // ── Desktop drag ──
     el.addEventListener("dragstart",e=>{dragSrcIdx=idx;el.classList.add("dragging-item");e.dataTransfer.effectAllowed="move";});
-    el.addEventListener("dragend",()=>{
-      dragSrcIdx=null;el.classList.remove("dragging-item");
-      if(dropIndicator&&dropIndicator.parentNode)dropIndicator.parentNode.removeChild(dropIndicator);
-    });
+    el.addEventListener("dragend",()=>{dragSrcIdx=null;el.classList.remove("dragging-item");if(dropIndicator&&dropIndicator.parentNode)dropIndicator.parentNode.removeChild(dropIndicator);});
     el.addEventListener("dragover",e=>{e.preventDefault();e.dataTransfer.dropEffect="move";});
     el.addEventListener("dragenter",e=>{
       e.preventDefault();if(dragSrcIdx===null)return;
-      const indicator=ensureDropIndicator();
-      const rect=el.getBoundingClientRect();
-      const before=(e.clientY-rect.top)<rect.height/2;
+      const ind=ensureDropIndicator();const rect=el.getBoundingClientRect();const before=(e.clientY-rect.top)<rect.height/2;
       const listEl=document.getElementById("sidebar-tracklist");
-      if(before)listEl.insertBefore(indicator,el);else listEl.insertBefore(indicator,el.nextSibling);
+      if(before)listEl.insertBefore(ind,el);else listEl.insertBefore(ind,el.nextSibling);
     });
     el.addEventListener("drop",e=>{
-      e.preventDefault();
-      const listEl=document.getElementById("sidebar-tracklist");
+      e.preventDefault();const listEl=document.getElementById("sidebar-tracklist");
       if(dragSrcIdx===null||!dropIndicator||!dropIndicator.parentNode)return;
-      const children=[...listEl.children];
-      let newPos=children.indexOf(dropIndicator);
+      const children=[...listEl.children];let newPos=children.indexOf(dropIndicator);
       if(newPos>dragSrcIdx)newPos--;
-      const moved=TRACKS.splice(dragSrcIdx,1)[0];
-      TRACKS.splice(newPos,0,moved);
+      const moved=TRACKS.splice(dragSrcIdx,1)[0];TRACKS.splice(newPos,0,moved);
       if(dragSrcIdx===currentIndex)currentIndex=newPos;
       else if(dragSrcIdx<currentIndex&&newPos>=currentIndex)currentIndex--;
       else if(dragSrcIdx>currentIndex&&newPos<=currentIndex)currentIndex++;
       dragSrcIdx=null;if(dropIndicator.parentNode)dropIndicator.parentNode.removeChild(dropIndicator);
       renderAll();
     });
-
-    // ── Mobile touch drag (via drag handle only) ──
     const handle=el.querySelector(".drag-handle");
     if(handle){
       handle.addEventListener("touchstart",e=>{
-        e.stopPropagation();
-        touchDragIdx=idx;
-        touchDragEl=el;
-        el.classList.add("dragging-item");
-        // ghost clone
+        e.stopPropagation();touchDragIdx=idx;touchDragEl=el;el.classList.add("dragging-item");
         touchClone=el.cloneNode(true);
         touchClone.style.cssText=`position:fixed;z-index:9999;pointer-events:none;opacity:.85;width:${el.offsetWidth}px;border-radius:10px;background:rgba(45,91,255,.18);border:1px solid rgba(123,47,255,.5);`;
-        const r=el.getBoundingClientRect();
-        touchClone.style.left=r.left+"px";
-        touchClone.style.top=r.top+"px";
+        const r=el.getBoundingClientRect();touchClone.style.left=r.left+"px";touchClone.style.top=r.top+"px";
         document.body.appendChild(touchClone);
       },{passive:true});
     }
   });
-
-  // Touch move/end on the list container
   list.addEventListener("touchmove",e=>{
-    if(touchDragIdx===null)return;
-    e.preventDefault();
+    if(touchDragIdx===null)return;e.preventDefault();
     const touch=e.touches[0];
-    if(touchClone){
-      touchClone.style.left=(touch.clientX-40)+"px";
-      touchClone.style.top=(touch.clientY-20)+"px";
-    }
-    // show drop indicator
-    const hit=getTrackIdxAtY(touch.clientY);
-    const indicator=ensureDropIndicator();
-    if(hit){
-      if(hit.before)list.insertBefore(indicator,hit.el);
-      else list.insertBefore(indicator,hit.el.nextSibling);
-    }
+    if(touchClone){touchClone.style.left=(touch.clientX-40)+"px";touchClone.style.top=(touch.clientY-20)+"px";}
+    const hit=getTrackElAtY(touch.clientY);const ind=ensureDropIndicator();
+    if(hit){if(hit.before)list.insertBefore(ind,hit.el);else list.insertBefore(ind,hit.el.nextSibling);}
   },{passive:false});
-
   list.addEventListener("touchend",e=>{
     if(touchDragIdx===null)return;
-    removeTouchClone();
-    if(touchDragEl)touchDragEl.classList.remove("dragging-item");
+    removeTouchClone();if(touchDragEl)touchDragEl.classList.remove("dragging-item");
     if(dropIndicator&&dropIndicator.parentNode){
-      const children=[...list.children];
-      let newPos=children.indexOf(dropIndicator);
-      if(newPos>touchDragIdx)newPos--;
-      newPos=Math.max(0,Math.min(TRACKS.length-1,newPos));
-      const moved=TRACKS.splice(touchDragIdx,1)[0];
-      TRACKS.splice(newPos,0,moved);
+      const children=[...list.children];let newPos=children.indexOf(dropIndicator);
+      if(newPos>touchDragIdx)newPos--;newPos=Math.max(0,Math.min(TRACKS.length-1,newPos));
+      const moved=TRACKS.splice(touchDragIdx,1)[0];TRACKS.splice(newPos,0,moved);
       if(touchDragIdx===currentIndex)currentIndex=newPos;
       else if(touchDragIdx<currentIndex&&newPos>=currentIndex)currentIndex--;
       else if(touchDragIdx>currentIndex&&newPos<=currentIndex)currentIndex++;
       dropIndicator.parentNode.removeChild(dropIndicator);
     }
-    touchDragIdx=null;touchDragEl=null;
-    renderAll();
+    touchDragIdx=null;touchDragEl=null;renderAll();
   });
 }
 
@@ -976,19 +905,15 @@ updateRepeatUI();
 updateShuffleUI();
 loadTrack(0,false);
 
-// Layout first, then show windows so they appear in correct position (no flash)
+// Double rAF: layout runs after paint so offsetHeight is real
 requestAnimationFrame(()=>requestAnimationFrame(()=>{
   applyDesktopLayout();
   window.addEventListener("resize",applyDesktopLayout);
 
-  // Show tracklist + player on load; gallery stays closed
-  const tl=document.getElementById("tracklist-win");
-  const pl=document.getElementById("player-win");
-  tl.style.display="flex";
-  pl.style.display="flex";
-  // Set initial z: tracklist below player
-  tl.style.zIndex=320;
-  pl.style.zIndex=330;
+  document.getElementById("tracklist-win").style.display="flex";
+  document.getElementById("player-win").style.display="flex";
+  document.getElementById("tracklist-win").style.zIndex=320;
+  document.getElementById("player-win").style.zIndex=330;
 
   updateMobPlayerHeight();
 }));
