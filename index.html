@@ -64,12 +64,7 @@
     backdrop-filter:blur(8px);
     color:var(--baby-blue);
   }
-  .ctrl-btn:hover{
-    background:rgba(126,200,227,.12);
-    border-color:rgba(126,200,227,.35);
-    box-shadow:0 0 10px rgba(126,200,227,.2);
-    transform:scale(1.08);
-  }
+  .ctrl-btn:hover{background:rgba(126,200,227,.12);border-color:rgba(126,200,227,.35);box-shadow:0 0 10px rgba(126,200,227,.2);transform:scale(1.08);}
   .ctrl-btn:active{transform:scale(.95);}
   .play-btn{
     background:linear-gradient(135deg,var(--jestr-purple),var(--jestr-blue));
@@ -80,8 +75,7 @@
   .play-btn:hover{box-shadow:0 0 34px rgba(45,91,255,.75),inset 0 1px 0 rgba(255,255,255,.2);}
 
   /* ── PROGRESS ── */
-  .progress-wrap{position:relative;height:18px;display:flex;align-items:center;cursor:pointer;flex:1;
-    user-select:none;-webkit-user-select:none;}
+  .progress-wrap{position:relative;height:18px;display:flex;align-items:center;cursor:pointer;flex:1;user-select:none;-webkit-user-select:none;}
   .progress-track-bg{position:absolute;left:0;right:0;height:3px;border-radius:3px;background:rgba(255,255,255,.1);transition:height .12s;}
   .progress-fill-bar{position:absolute;left:0;top:50%;transform:translateY(-50%);height:3px;border-radius:3px;background:linear-gradient(90deg,var(--jestr-purple),var(--jestr-blue),var(--jestr-green));pointer-events:none;transition:height .12s;}
   .progress-thumb{position:absolute;top:50%;transform:translate(-50%,-50%);width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px rgba(123,47,255,.5),0 2px 8px rgba(0,0,0,.6);pointer-events:none;opacity:0;transition:opacity .15s,transform .1s;z-index:2;}
@@ -89,17 +83,54 @@
   .progress-wrap:hover .progress-track-bg,.progress-wrap:hover .progress-fill-bar{height:5px;}
   .progress-wrap.dragging .progress-thumb{opacity:1;transform:translate(-50%,-50%) scale(1.2);}
 
-  /* ── VOLUME (now full-width row, matches progress style) ── */
-  .volume-wrap{
-    position:relative;height:18px;display:flex;align-items:center;cursor:pointer;flex:1;
-    user-select:none;-webkit-user-select:none;
-  }
+  /* ── CUSTOM VOLUME (desktop only) ── */
+  .volume-wrap{position:relative;height:18px;display:flex;align-items:center;cursor:pointer;flex:1;user-select:none;-webkit-user-select:none;}
   .volume-track-bg{position:absolute;left:0;right:0;height:3px;border-radius:3px;background:rgba(255,255,255,.1);transition:height .12s;}
   .volume-fill-bar{position:absolute;left:0;top:50%;transform:translateY(-50%);height:3px;border-radius:3px;background:var(--jestr-green);pointer-events:none;transition:height .12s;}
   .volume-thumb{position:absolute;top:50%;transform:translate(-50%,-50%);width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px rgba(0,200,150,.5),0 2px 8px rgba(0,0,0,.6);pointer-events:none;opacity:0;transition:opacity .15s,transform .1s;z-index:2;}
   .volume-wrap:hover .volume-thumb{opacity:1;}
   .volume-wrap:hover .volume-track-bg,.volume-wrap:hover .volume-fill-bar{height:5px;}
   .volume-wrap.dragging .volume-thumb{opacity:1;transform:translate(-50%,-50%) scale(1.2);}
+
+  /* ── NATIVE VOLUME RANGE (mobile only) ──
+     A real <input type=range> that iOS/Android intercept for hardware volume.
+     Styled to blend with the player. Hidden on desktop. */
+  #fp-volume-mobile{
+    display:none; /* shown only on mobile via media query */
+    align-items:center;gap:7px;
+    position:relative;z-index:1;
+    background:rgba(0,0,0,.2);
+    border:1px solid rgba(255,255,255,.06);
+    border-radius:10px;
+    padding:5px 10px;
+  }
+  #native-volume{
+    flex:1;
+    -webkit-appearance:none;
+    appearance:none;
+    height:3px;
+    border-radius:3px;
+    background:linear-gradient(90deg, var(--jestr-green) var(--vol-pct,80%), rgba(255,255,255,.1) var(--vol-pct,80%));
+    outline:none;
+    border:none;
+    cursor:pointer;
+    margin:0;
+  }
+  #native-volume::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width:16px;height:16px;
+    border-radius:50%;
+    background:#fff;
+    box-shadow:0 0 0 3px rgba(0,200,150,.5),0 2px 8px rgba(0,0,0,.6);
+    cursor:pointer;
+  }
+  #native-volume::-moz-range-thumb{
+    width:16px;height:16px;
+    border-radius:50%;
+    background:#fff;
+    box-shadow:0 0 0 3px rgba(0,200,150,.5),0 2px 8px rgba(0,0,0,.6);
+    border:none;cursor:pointer;
+  }
 
   .search-wrap{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);border:1px solid rgba(123,47,255,.2);border-radius:10px;padding:0 10px;height:36px;transition:border-color .2s,box-shadow .2s;}
   .search-wrap:focus-within{border-color:rgba(123,47,255,.55);box-shadow:0 0 0 3px rgba(123,47,255,.08);}
@@ -111,18 +142,13 @@
   #float-player{
     position:fixed;z-index:300;
     left:320px;bottom:20px;
-    width:360px;
-    min-width:280px;max-width:680px;
+    width:360px;min-width:280px;max-width:680px;
     background:rgba(8,5,22,.52);
     backdrop-filter:blur(40px) saturate(1.8) brightness(1.05);
     -webkit-backdrop-filter:blur(40px) saturate(1.8) brightness(1.05);
     border:1px solid rgba(150,100,255,.3);
     border-radius:18px;
-    box-shadow:
-      0 8px 48px rgba(0,0,0,.65),
-      0 0 0 1px rgba(45,91,255,.07),
-      inset 0 1px 0 rgba(255,255,255,.08),
-      inset 0 -1px 0 rgba(0,0,0,.3);
+    box-shadow:0 8px 48px rgba(0,0,0,.65),0 0 0 1px rgba(45,91,255,.07),inset 0 1px 0 rgba(255,255,255,.08),inset 0 -1px 0 rgba(0,0,0,.3);
     padding:10px 14px 12px;
     user-select:none;
     overflow:hidden;
@@ -131,8 +157,7 @@
   @media (max-width:767px){
     body{overflow:hidden;}
     #float-player{
-      position:fixed!important;
-      left:0!important;right:0!important;bottom:0!important;top:auto!important;
+      position:fixed!important;left:0!important;right:0!important;bottom:0!important;top:auto!important;
       transform:none!important;width:100%!important;max-width:100%!important;min-width:0!important;
       border-radius:16px 16px 0 0!important;
       border-left:none!important;border-right:none!important;border-bottom:none!important;
@@ -140,22 +165,20 @@
     main.mobile-main{
       display:flex!important;flex-direction:column!important;
       position:fixed!important;top:56px!important;left:0!important;right:0!important;
-      bottom:var(--player-height, 140px)!important;overflow:hidden!important;
+      bottom:var(--player-height,140px)!important;overflow:hidden!important;
     }
-    .mobile-planet-section{
-      flex-shrink:0;padding:16px 0 12px;
-      display:flex;flex-direction:column;align-items:center;
-    }
-    .mobile-tracklist-section{
-      flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 20px 16px;
-    }
+    .mobile-planet-section{flex-shrink:0;padding:16px 0 12px;display:flex;flex-direction:column;align-items:center;}
+    .mobile-tracklist-section{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 20px 16px;}
     .mobile-tracklist-section::-webkit-scrollbar{display:none;}
     .mobile-tracklist-section{-ms-overflow-style:none;scrollbar-width:none;}
+
+    /* on mobile: hide custom volume, show native range */
+    #fp-volume{display:none!important;}
+    #fp-volume-mobile{display:flex!important;}
   }
 
   #float-player::before{
-    content:"";
-    position:absolute;inset:0;border-radius:18px;pointer-events:none;
+    content:"";position:absolute;inset:0;border-radius:18px;pointer-events:none;
     background:
       radial-gradient(circle 18px at 0% 0%,rgba(126,200,227,.3) 0%,transparent 70%),
       radial-gradient(circle 18px at 100% 0%,rgba(126,200,227,.3) 0%,transparent 70%),
@@ -173,7 +196,6 @@
     position:relative;z-index:1;
   }
   #fp-handle:active{cursor:grabbing;}
-
   .fp-resize{position:absolute;width:20px;height:20px;z-index:10;opacity:0;}
   .fp-resize.nw{top:0;left:0;cursor:nw-resize;}
   .fp-resize.ne{top:0;right:0;cursor:ne-resize;}
@@ -181,18 +203,9 @@
   .fp-resize.se{bottom:0;right:0;cursor:se-resize;}
 
   #fp-info{display:flex;align-items:center;gap:10px;margin-bottom:8px;position:relative;z-index:1;}
-  #fp-art{
-    width:36px;height:36px;border-radius:10px;flex-shrink:0;
-    display:flex;align-items:center;justify-content:center;
-    background:rgba(123,47,255,.22);
-    border:1px solid rgba(123,47,255,.35);
-    box-shadow:0 0 16px rgba(123,47,255,.25),inset 0 1px 0 rgba(255,255,255,.1);
-  }
-  #fp-controls{
-    display:flex;align-items:center;justify-content:center;
-    gap:8px;margin-bottom:10px;position:relative;z-index:1;
-  }
-  #fp-progress,#fp-volume{
+  #fp-art{width:36px;height:36px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:rgba(123,47,255,.22);border:1px solid rgba(123,47,255,.35);box-shadow:0 0 16px rgba(123,47,255,.25),inset 0 1px 0 rgba(255,255,255,.1);}
+  #fp-controls{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;position:relative;z-index:1;}
+  #fp-progress,#fp-volume,#fp-volume-mobile{
     display:flex;align-items:center;gap:7px;
     position:relative;z-index:1;
     background:rgba(0,0,0,.2);
@@ -201,6 +214,8 @@
     padding:5px 10px;
   }
   #fp-progress{margin-bottom:6px;}
+  #fp-volume{margin-bottom:0;}
+  #fp-volume-mobile{margin-bottom:0;}
 </style>
 <script id="tailwind-config">
   tailwind.config={darkMode:"class",theme:{extend:{
@@ -241,7 +256,6 @@
 </aside>
 
 <div id="drawer-overlay" class="fixed inset-0 bg-black/70 z-40 md:hidden"></div>
-
 <aside id="mobile-drawer" class="fixed left-0 top-0 h-full w-64 z-50 flex flex-col p-5 gap-4 md:hidden container-texture"
   style="background:rgba(6,4,18,.92);backdrop-filter:blur(24px)">
   <div class="flex items-center justify-between">
@@ -315,7 +329,7 @@
   </div>
 </main>
 
-<!-- ══ FLOATING PLAYER ═══════════════════════════════════════ -->
+<!-- ══ FLOATING PLAYER ══ -->
 <div id="float-player" class="container-texture">
   <div class="fp-resize nw" data-dir="nw"></div>
   <div class="fp-resize ne" data-dir="ne"></div>
@@ -332,7 +346,6 @@
     </button>
   </div>
 
-  <!-- track info — volume icon/slider removed from here -->
   <div id="fp-info">
     <div id="fp-art">
       <span class="material-symbols-outlined" style="font-size:18px;color:var(--jestr-purple);font-variation-settings:'FILL' 1">music_note</span>
@@ -344,30 +357,18 @@
   </div>
 
   <div id="fp-controls">
-    <button id="btn-shuffle" class="ctrl-btn" title="Shuffle">
-      <span class="material-symbols-outlined" style="font-size:16px">shuffle</span>
-    </button>
-    <button id="btn-prev" class="ctrl-btn" title="Prev">
-      <span class="material-symbols-outlined" style="font-size:18px">skip_previous</span>
-    </button>
-    <button id="btn-back10" class="ctrl-btn" title="-10s">
-      <span class="material-symbols-outlined" style="font-size:17px">replay_10</span>
-    </button>
+    <button id="btn-shuffle" class="ctrl-btn" title="Shuffle"><span class="material-symbols-outlined" style="font-size:16px">shuffle</span></button>
+    <button id="btn-prev" class="ctrl-btn" title="Prev"><span class="material-symbols-outlined" style="font-size:18px">skip_previous</span></button>
+    <button id="btn-back10" class="ctrl-btn" title="-10s"><span class="material-symbols-outlined" style="font-size:17px">replay_10</span></button>
     <button id="btn-play" class="play-btn" style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
       <span id="play-icon" class="material-symbols-outlined text-white" style="font-size:22px;font-variation-settings:'FILL' 1">play_arrow</span>
     </button>
-    <button id="btn-fwd10" class="ctrl-btn" title="+10s">
-      <span class="material-symbols-outlined" style="font-size:17px">forward_10</span>
-    </button>
-    <button id="btn-next" class="ctrl-btn" title="Next">
-      <span class="material-symbols-outlined" style="font-size:18px">skip_next</span>
-    </button>
-    <button id="btn-repeat" class="ctrl-btn" title="Repeat">
-      <span id="repeat-icon" class="material-symbols-outlined" style="font-size:16px">repeat</span>
-    </button>
+    <button id="btn-fwd10" class="ctrl-btn" title="+10s"><span class="material-symbols-outlined" style="font-size:17px">forward_10</span></button>
+    <button id="btn-next" class="ctrl-btn" title="Next"><span class="material-symbols-outlined" style="font-size:18px">skip_next</span></button>
+    <button id="btn-repeat" class="ctrl-btn" title="Repeat"><span id="repeat-icon" class="material-symbols-outlined" style="font-size:16px">repeat</span></button>
   </div>
 
-  <!-- progress row -->
+  <!-- progress -->
   <div id="fp-progress">
     <span id="time-current" class="tape-counter" style="width:30px;flex-shrink:0;font-size:8px">0:00</span>
     <div class="progress-wrap" id="progress-rail">
@@ -378,7 +379,7 @@
     <span id="time-total" class="tape-counter" style="width:30px;flex-shrink:0;text-align:right;font-size:8px">0:00</span>
   </div>
 
-  <!-- volume row — same box style as progress, full-width slider, no text-highlight -->
+  <!-- custom volume row (desktop) -->
   <div id="fp-volume">
     <span class="material-symbols-outlined" style="font-size:14px;color:rgba(0,200,150,.55);flex-shrink:0">volume_up</span>
     <div class="volume-wrap" id="volume-rail">
@@ -388,10 +389,16 @@
     </div>
     <span class="tape-counter" style="width:30px;flex-shrink:0;text-align:right;font-size:8px" id="volume-pct">80%</span>
   </div>
+
+  <!-- native volume row (mobile) — browser/OS intercepts this for hardware volume -->
+  <div id="fp-volume-mobile">
+    <span class="material-symbols-outlined" style="font-size:14px;color:rgba(0,200,150,.55);flex-shrink:0">volume_up</span>
+    <input type="range" id="native-volume" min="0" max="1" step="0.01" value="0.8"/>
+    <span class="tape-counter" style="width:36px;flex-shrink:0;text-align:right;font-size:8px">Device</span>
+  </div>
 </div>
 
 <script>
-  /* ── STARFIELD ── */
   (function(){
     const c=document.getElementById("stars-canvas");
     const ctx=c.getContext("2d");
@@ -417,7 +424,6 @@
     window.addEventListener("resize",()=>{resize();mkStars();});
   })();
 
-  /* ── MOBILE PLAYER HEIGHT → CSS VAR ── */
   function updatePlayerHeightVar(){
     if(window.innerWidth>=768)return;
     const fp=document.getElementById("float-player");
@@ -443,10 +449,9 @@
 
   const audio=document.getElementById("audio-player");
   let currentIndex=0,isPlaying=false,isShuffle=false,repeatMode=0;
-  let seekOnReady=null,isSeeking=false;
-  let durationPollTimer=null;
+  let seekOnReady=null,isSeeking=false,durationPollTimer=null;
 
-  /* ── DRAG + CORNER RESIZE ── */
+  /* ── DRAG + RESIZE ── */
   (function(){
     const fp=document.getElementById("float-player");
     const handle=document.getElementById("fp-handle");
@@ -456,17 +461,14 @@
     function pinPosition(){
       if(isMobile())return;
       if(!fp.classList.contains("is-positioned")){
-        const r=getRect();
-        fp.style.bottom="";fp.style.transform="";
-        fp.style.left=r.left+"px";fp.style.top=r.top+"px";
-        fp.style.width=r.width+"px";
+        const r=getRect();fp.style.bottom="";fp.style.transform="";
+        fp.style.left=r.left+"px";fp.style.top=r.top+"px";fp.style.width=r.width+"px";
         fp.classList.add("is-positioned");
       }
     }
     function clamp(v,mn,mx){return Math.max(mn,Math.min(mx,v));}
     function onDown(e,m){
-      if(isMobile())return;
-      pinPosition();
+      if(isMobile())return;pinPosition();
       const r=getRect();mode=m;
       const cx=e.touches?e.touches[0].clientX:e.clientX;
       const cy=e.touches?e.touches[0].clientY:e.clientY;
@@ -479,10 +481,8 @@
       const cy=e.touches?e.touches[0].clientY:e.clientY;
       const dx=cx-startX,dy=cy-startY;
       const mw=280,mh=120,vw=window.innerWidth,vh=window.innerHeight;
-      if(mode==='drag'){
-        fp.style.left=clamp(startL+dx,0,vw-startW)+"px";
-        fp.style.top=clamp(startT+dy,0,vh-startH)+"px";
-      } else {
+      if(mode==='drag'){fp.style.left=clamp(startL+dx,0,vw-startW)+"px";fp.style.top=clamp(startT+dy,0,vh-startH)+"px";}
+      else{
         let l=startL,t=startT,w=startW,h=startH;
         if(mode==='se'){w=clamp(startW+dx,mw,680);h=clamp(startH+dy,mh,600);}
         if(mode==='sw'){const nw=clamp(startW-dx,mw,680);l=startL+startW-nw;w=nw;h=clamp(startH+dy,mh,600);}
@@ -504,26 +504,17 @@
     window.addEventListener("touchend",onUp);
   })();
 
-  /* ── HELPERS ── */
-  function fmt(s){
-    if(s===null||s===undefined||isNaN(s)||!isFinite(s)||s<0)return"0:00";
-    return`${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,"0")}`;
+  function fmt(s){if(s===null||s===undefined||isNaN(s)||!isFinite(s)||s<0)return"0:00";return`${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,"0")}`;
   }
   function updateChroma(id,text){const el=document.getElementById(id);if(!el)return;el.textContent=text;el.setAttribute("data-text",text);}
   function downloadCurrent(){const t=TRACKS[currentIndex];const a=document.createElement("a");a.href=t.file;a.download=t.file;a.click();}
 
-  function isGoodDuration(d){
-    return typeof d==="number" && isFinite(d) && d>0 && d<18000;
-  }
+  function isGoodDuration(d){return typeof d==="number"&&isFinite(d)&&d>0&&d<18000;}
   function tryUpdateDuration(){
     const dur=audio.duration;
-    if(isGoodDuration(dur)){
-      document.getElementById("time-total").textContent=fmt(dur);
-      return true;
-    }
+    if(isGoodDuration(dur)){document.getElementById("time-total").textContent=fmt(dur);return true;}
     return false;
   }
-
   function startDurationPoll(){
     if(durationPollTimer){clearInterval(durationPollTimer);durationPollTimer=null;}
     const deadline=Date.now()+30000;
@@ -532,38 +523,28 @@
       if(Date.now()>=deadline){clearInterval(durationPollTimer);durationPollTimer=null;}
     },500);
   }
-
   function applySavedSeek(){
     if(seekOnReady!==null&&audio.readyState>=1&&isGoodDuration(audio.duration)){
-      audio.currentTime=seekOnReady*audio.duration;seekOnReady=null;
-      tryUpdateDuration();
+      audio.currentTime=seekOnReady*audio.duration;seekOnReady=null;tryUpdateDuration();
     }
   }
   audio.addEventListener("loadedmetadata",()=>{tryUpdateDuration();applySavedSeek();});
   audio.addEventListener("canplay",()=>{tryUpdateDuration();applySavedSeek();});
   audio.addEventListener("durationchange",()=>{tryUpdateDuration();applySavedSeek();});
 
-  function setProgress(pct){
-    document.getElementById("progress-fill").style.width=pct+"%";
-    document.getElementById("progress-thumb").style.left=pct+"%";
-  }
+  function setProgress(pct){document.getElementById("progress-fill").style.width=pct+"%";document.getElementById("progress-thumb").style.left=pct+"%";}
   function seekToPct(pct){
-    pct=Math.max(0,Math.min(1,pct));
-    setProgress(pct*100);
-    if(audio.readyState>=1&&isGoodDuration(audio.duration)){
-      audio.currentTime=pct*audio.duration;seekOnReady=null;
-    } else {seekOnReady=pct;}
+    pct=Math.max(0,Math.min(1,pct));setProgress(pct*100);
+    if(audio.readyState>=1&&isGoodDuration(audio.duration)){audio.currentTime=pct*audio.duration;seekOnReady=null;}
+    else{seekOnReady=pct;}
   }
   function skip(sec){
     if(audio.readyState>=1&&isGoodDuration(audio.duration))
       audio.currentTime=Math.max(0,Math.min(audio.duration,(audio.currentTime||0)+sec));
   }
   function clientXToFraction(clientX,rail){
-    const r=rail.getBoundingClientRect();
-    return Math.max(0,Math.min(1,(clientX-r.left)/r.width));
+    const r=rail.getBoundingClientRect();return Math.max(0,Math.min(1,(clientX-r.left)/r.width));
   }
-
-  /* ── GENERIC SCRUBBER (handles mouse + touch, no text-select) ── */
   function makeScrubber(railId,onScrub,onEnd){
     const rail=document.getElementById(railId);let drag=false;
     function start(x){drag=true;rail.classList.add("dragging");onScrub(clientXToFraction(x,rail));}
@@ -576,11 +557,7 @@
     window.addEventListener("touchmove",e=>{if(drag){e.preventDefault();move(e.touches[0].clientX);}},{passive:false});
     window.addEventListener("touchend",end);
   }
-
-  makeScrubber("progress-rail",
-    pct=>{isSeeking=true;seekToPct(pct);},
-    ()=>{isSeeking=false;}
-  );
+  makeScrubber("progress-rail",pct=>{isSeeking=true;seekToPct(pct);},()=>{isSeeking=false;});
 
   function loadTrack(index,autoplay=false){
     currentIndex=index;seekOnReady=null;isSeeking=false;
@@ -601,29 +578,43 @@
     updatePlayIcons();
   }
 
+  /* ── DESKTOP custom volume ── */
   function setVolume(pct){
     pct=Math.max(0,Math.min(1,pct));
     audio.volume=pct;
     document.getElementById("volume-fill").style.width=(pct*100)+"%";
     document.getElementById("volume-thumb").style.left=(pct*100)+"%";
     document.getElementById("volume-pct").textContent=Math.round(pct*100)+"%";
+    // keep native range in sync
+    const nv=document.getElementById("native-volume");
+    if(nv) nv.value=pct;
   }
+  makeScrubber("volume-rail",pct=>setVolume(pct));
 
-  makeScrubber("volume-rail", pct=>setVolume(pct));
+  /* ── MOBILE native <input type=range> volume ──
+     iOS/Android intercept this and show the system volume HUD. */
+  (function(){
+    const nv=document.getElementById("native-volume");
+    function updateTrackBg(){
+      const pct=Math.round(parseFloat(nv.value)*100);
+      nv.style.setProperty('--vol-pct', pct+'%');
+      nv.style.background=`linear-gradient(90deg, var(--jestr-green) ${pct}%, rgba(255,255,255,.1) ${pct}%)`;
+    }
+    nv.addEventListener("input",()=>{
+      audio.volume=parseFloat(nv.value);
+      updateTrackBg();
+    });
+    updateTrackBg();
+  })();
 
   audio.addEventListener("timeupdate",()=>{
-    const dur=audio.duration;
-    const cur=audio.currentTime;
-    if(cur>0 && !isGoodDuration(dur)){
-      if(tryUpdateDuration()&&durationPollTimer){clearInterval(durationPollTimer);durationPollTimer=null;}
-    }
+    const dur=audio.duration,cur=audio.currentTime;
+    if(cur>0&&!isGoodDuration(dur)){if(tryUpdateDuration()&&durationPollTimer){clearInterval(durationPollTimer);durationPollTimer=null;}}
     if(isGoodDuration(dur)){
       document.getElementById("time-total").textContent=fmt(dur);
       document.getElementById("time-current").textContent=fmt(cur);
       if(!isSeeking)setProgress((cur/dur)*100);
-    } else {
-      document.getElementById("time-current").textContent=fmt(cur);
-    }
+    } else {document.getElementById("time-current").textContent=fmt(cur);}
   });
 
   audio.addEventListener("ended",()=>{
@@ -634,18 +625,13 @@
   });
 
   function updateRepeatUI(){
-    const btn=document.getElementById("btn-repeat");
-    const icon=document.getElementById("repeat-icon");
+    const btn=document.getElementById("btn-repeat"),icon=document.getElementById("repeat-icon");
     if(repeatMode===0){btn.style.color="var(--baby-blue)";icon.textContent="repeat";btn.title="Repeat: Off";}
     else if(repeatMode===1){btn.style.color="var(--jestr-red)";icon.textContent="repeat";btn.title="Repeat: All";}
     else{btn.style.color="var(--jestr-red)";icon.textContent="repeat_one";btn.title="Repeat: One";}
   }
-  function updateShuffleUI(){
-    document.getElementById("btn-shuffle").style.color=isShuffle?"var(--jestr-red)":"var(--baby-blue)";
-  }
-  function updatePlayIcons(){
-    document.getElementById("play-icon").textContent=isPlaying?"pause":"play_arrow";
-  }
+  function updateShuffleUI(){document.getElementById("btn-shuffle").style.color=isShuffle?"var(--jestr-red)":"var(--baby-blue)";}
+  function updatePlayIcons(){document.getElementById("play-icon").textContent=isPlaying?"pause":"play_arrow";}
 
   function trackHTML(t,i,isActive){
     return `<div class="track-item" data-index="${i}"
